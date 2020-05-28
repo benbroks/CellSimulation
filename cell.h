@@ -6,10 +6,13 @@ class Cell {
     private:
         int CpGBoxes, age;
         float S, R, E;
+        int bins[51];
         vector< pair<int, int> > Genomes;
     public:
         Cell();
         void generateGenome(float S, float R, float E);
-        pair<int,int> getPair(int i);
         void transition();
+        void setBinSize(int binSize[]);
+        pair<int,int> getPair(int i);
+        
 };

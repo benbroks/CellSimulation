@@ -9,42 +9,55 @@ Cell::Cell() {
 
 void Cell::generateGenome(float S, float R, float E) {
     Genomes = vector< pair<int,int> > (CpGBoxes, pair<int,int>(0,0));
+    int currentBin = -1;
+    int cumulativeBinColumns = 0;
     for (int i = 0; i < CpGBoxes; i++) {
-        float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        if (r > 0.75) {
+        // Shifting to next bin
+        if (i == cumulativeBinColumns) {
+            currentBin ++;
+            cumulativeBinColumns += bins[currentBin];
+        }
+        // Setting first column value
+        float r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        if (r1 < currentBin * 0.02) {
             Genomes[i].first = 1;
-            Genomes[i].second = 1;
-        } else if (r > 0.5) {
-            Genomes[i].first = 1;
-            Genomes[i].second = 0;
-        } else if (r > 0.25) {
+        } else {
             Genomes[i].first = 0;
+        }
+        // Setting second column value
+        r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        if (r1 < currentBin * 0.02) {
             Genomes[i].second = 1;
+        } else {
+            Genomes[i].second = 0;
         }
     }
-}
-
-pair<int,int> Cell::getPair(int i) {
-    return Genomes[i];
 }
 
 void Cell::transition() {
     float r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     if (r1 < R) {
         // Generate completely new Genome with Prob. R (Random Replacement)
+        int currentBin = -1;
+        int cumulativeBinColumns = 0;
         for (int i = 0; i < CpGBoxes; i++) {
-            float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-            if (r > 0.75) {
+            // Shifting to next bin
+            if (i == cumulativeBinColumns) {
+                currentBin ++;
+                cumulativeBinColumns += bins[currentBin];
+            }
+            // Setting first column value
+            float r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            if (r1 < currentBin * 0.02) {
                 Genomes[i].first = 1;
-                Genomes[i].second = 1;
-            } else if (r > 0.5) {
-                Genomes[i].first = 1;
-                Genomes[i].second = 0;
-            } else if (r > 0.25) {
-                Genomes[i].first = 0;
-                Genomes[i].second = 1;
             } else {
                 Genomes[i].first = 0;
+            }
+            // Setting second column value
+            r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            if (r1 < currentBin * 0.02) {
+                Genomes[i].second = 1;
+            } else {
                 Genomes[i].second = 0;
             }
         }
@@ -64,3 +77,14 @@ void Cell::transition() {
 
     
 }
+
+void Cell::setBinSize(int binSize[]) {
+    for(int i = 0; i < 51; i++) {
+        bins[i] = binSize[i];
+    }
+}
+
+pair<int,int> Cell::getPair(int i) {
+    return Genomes[i];
+}
+

@@ -12,6 +12,7 @@
 using namespace std;
 
 string paramFile = "param.h";
+string cpgFile = "cpg.csv";
 string line, i_fp, o_fp;
 int N, T;
 float S, R, E;
@@ -49,6 +50,32 @@ void findParam() {
     }
 }
 
+int * findCPG(int * binSize) {
+    ifstream input(cpgFile);
+    
+    
+    int i = 0;
+    while(getline(input, line)) {
+        if(line[0] == '%') {
+            continue;
+        }
+        int commaCount = 0;
+        int j = 0;
+        string sizeOfBin = "";
+        while(commaCount < 5) {
+            if(line[j] == ',') {
+                commaCount ++;
+            } else if (commaCount == 4) {
+                sizeOfBin = sizeOfBin + line[j];
+            }
+            j ++;
+        }
+        binSize[i] = stoi(sizeOfBin);
+        i ++;
+    }
+    return binSize;
+}
+
 // Calculates final CgP Concentration
 
 void histogram(Cell * Cells) {
@@ -82,9 +109,12 @@ void histogram(Cell * Cells) {
 
 int main(int argc, char *argv[]){
     findParam();
+    int binSize[51];
+    findCPG(binSize);
     srand (static_cast <unsigned> (time(0)));
     Cell * Cells = new Cell [N];
     for (int i = 0; i < N; i++) {
+        Cells[i].setBinSize(binSize);
         Cells[i].generateGenome(S,R,E);
     }
     // Simulate T Transitions
