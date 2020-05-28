@@ -5,7 +5,9 @@
 #include <string>
 #include <stdlib.h>
 #include <cmath>
+#include <chrono> 
 #include "cell.h"
+
 
 using namespace std;
 
@@ -14,6 +16,9 @@ string line, i_fp, o_fp;
 int N, T;
 float S, R, E;
 vector<float> binProb;
+
+// Goes through parameter file to obtain N,T,S,R,E values.
+// We can ignore the 'i' and 'o' values for now.
 
 void findParam() {
     ifstream input(paramFile);
@@ -43,6 +48,8 @@ void findParam() {
         }
     }
 }
+
+// Calculates final CgP Concentration
 
 void histogram(Cell * Cells) {
     int * Density = new int [N];
@@ -82,9 +89,11 @@ int main(int argc, char *argv[]){
     }
     // Simulate T Transitions
     for(int i = 0; i < T; i++) {
+        
         for(int j = 0; j < N; j++) {
              Cells[j].transition();
         }
+         
     }
     histogram(Cells);
 
