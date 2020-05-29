@@ -7,6 +7,7 @@ class Cell {
         int CpGBoxes, age;
         float S, R, E;
         int bins[51];
+        int findBin(int CpGSite);
         vector< pair<int, int> > Genomes;
     public:
         Cell();

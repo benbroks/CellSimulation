@@ -15,8 +15,7 @@ string paramFile = "param.h";
 string cpgFile = "cpg.csv";
 string line, i_fp, o_fp;
 int N, T;
-float S, R, E;
-vector<float> binProb;
+double S, R, E;
 
 // Goes through parameter file to obtain N,T,S,R,E values.
 // We can ignore the 'i' and 'o' values for now.
@@ -52,8 +51,6 @@ void findParam() {
 
 int * findCPG(int * binSize) {
     ifstream input(cpgFile);
-    
-    
     int i = 0;
     while(getline(input, line)) {
         if(line[0] == '%') {
@@ -76,8 +73,33 @@ int * findCPG(int * binSize) {
     return binSize;
 }
 
-// Calculates final CgP Concentration
+// Calculate final mean
+double findMean(Cell * Cells) {
+    int s = 0;
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < 27634; j++) {
+            s += Cells[i].getPair(j).first + Cells[i].getPair(j).second;
+        }
+    }
+    double mu = s / (double(2) * 27634 * N);
+    return mu;
+}
 
+double findVariance(Cell * Cells, double mean) {
+    double col_mean = 0;
+    double var = 0;
+    for(int i = 0; i < 27634; i++) {
+        col_mean = 0;
+        for(int j = 0; j < N; j++) {
+            col_mean += (Cells[j].getPair(i).first + Cells[j].getPair(i).second) / double(2);
+        }
+        var += (col_mean/N - mean) * (col_mean/N - mean);
+    }
+    return var / 27634;
+    
+}
+
+// Calculates final CgP Concentration
 void histogram(Cell * Cells) {
     int * Density = new int [N];
     int H[51];
@@ -97,7 +119,7 @@ void histogram(Cell * Cells) {
     }
     // Placing GcP Sites in Bins
     for (int i = 0; i < N; i++) {
-        int param = int(float(Density[i]) / (2*27634) / 0.02);
+        int param = int(double(Density[i]) / (2*27634) / 0.02);
         H[param] += 1;
     }
     // Printing Bins
@@ -112,20 +134,31 @@ int main(int argc, char *argv[]){
     int binSize[51];
     findCPG(binSize);
     srand (static_cast <unsigned> (time(0)));
+    cout << "Begin Simulation." << endl;
     Cell * Cells = new Cell [N];
     for (int i = 0; i < N; i++) {
         Cells[i].setBinSize(binSize);
         Cells[i].generateGenome(S,R,E);
     }
+    cout << "Cells instantiated." << endl;
     // Simulate T Transitions
+    chrono::time_point<chrono::system_clock> start, end; 
+    chrono::duration<double> elapsed_seconds;
+    start = chrono::system_clock::now(); 
     for(int i = 0; i < T; i++) {
-        
         for(int j = 0; j < N; j++) {
              Cells[j].transition();
         }
-         
+        end = chrono::system_clock::now(); 
+        elapsed_seconds = end - start; 
+        cout << "Completed " << i + 1 << " of " << T << " transitions. " << "Approximately " << T/float(i+1) * elapsed_seconds.count() - elapsed_seconds.count() <<" seconds remaining." << "\r";
+        cout.flush();
     }
-    histogram(Cells);
+    double mu = findMean(Cells);
+    double var = findVariance(Cells, mu);
+    cout << endl;
+    cout << "Mean: " << mu << endl;
+    cout << "Variance: " << var << endl;
 
     delete [] Cells;
 	return 1;
