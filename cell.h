@@ -21,5 +21,6 @@ class Cell {
         void transition();
         void setBinSize(int binSize[]);
         pair<int,int> getPair(int i);
+        int getAge();
         
 };

@@ -2,13 +2,16 @@
 N=500
 
 [Number of Transitions] 
-T=5
+T=15
 
 [Error/Flip Rate] 
 S=0.001
 
 [Random Replacement Rate] 
 R=0.0001 
+
+[Orderly Replacement Rate]
+OR=0.01
 
 [Age] 
 A=10

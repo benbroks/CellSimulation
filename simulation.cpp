@@ -15,8 +15,7 @@ string line, i_fp, m_o_fp, s_o_fp;
 int N, T;
 double S, R, E;
 
-// Goes through parameter file to obtain N,T,S,R,E values.
-// We can ignore the 'i' and 'o' values for now.
+// Goes through parameter file to obtain N,T,S,R,E values and relevant file paths
 
 void findParam() {
     ifstream input(paramFile);
@@ -56,22 +55,21 @@ int * findCPG(int * binSize) {
     ifstream input(i_fp);
     int i = 0;
     while(getline(input, line)) {
-        if(line[0] == '%') {
-            continue;
-        }
-        int commaCount = 0;
-        int j = 0;
-        string sizeOfBin = "";
-        while(commaCount < 5) {
-            if(line[j] == ',') {
-                commaCount ++;
-            } else if (commaCount == 4) {
-                sizeOfBin = sizeOfBin + line[j];
+        if((line[0] >= '0') && (line[0] <= '9')) {
+            int commaCount = 0;
+            int j = 0;
+            string sizeOfBin = "";
+            while(commaCount < 5) {
+                if(line[j] == ',') {
+                    commaCount ++;
+                } else if (commaCount == 4) {
+                    sizeOfBin = sizeOfBin + line[j];
+                }
+                j ++;
             }
-            j ++;
-        }
-        binSize[i] = stoi(sizeOfBin);
-        i ++;
+            binSize[i] = stoi(sizeOfBin);
+            i ++;
+        } 
     }
     return binSize;
 }
@@ -100,6 +98,7 @@ double findMean(Cell * Cells, ofstream & o) {
     o << endl;
     double mu = s / (double(2) * 27634 * N);
     o << "Mean," << mu << endl;
+    // Print to command line
     cout << "Mean: " << mu << endl;
     return mu;
 }
@@ -116,6 +115,7 @@ void findVariance(Cell * Cells, double mean, ofstream & o) {
         var += (col_mean/N - mean) * (col_mean/N - mean);
     }
     o << "Variance," << var / 27634 << endl;
+    // Print to command line
     cout << "Variance: " << var / 27634 << endl;
 }
 

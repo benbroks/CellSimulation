@@ -10,8 +10,8 @@ void Cell::generateGenome(float S, float R, float E) {
     Genomes = vector< pair<int,int> > (CpGBoxes, pair<int,int>(0,0));
     int currentBin = 0;
     for (int i = 0; i < CpGBoxes; i++) {
-        currentBin = findBin(i);
         // Setting first column value
+        currentBin = findBin(i);
         float r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (r1 < currentBin * 0.02) {
             Genomes[i].first = 1;
@@ -26,6 +26,7 @@ void Cell::generateGenome(float S, float R, float E) {
             Genomes[i].second = 0;
         }
     }
+    age = 0;
 }
 
 void Cell::randomCellReplacement() {
@@ -89,6 +90,7 @@ void Cell::transition() {
     } else {
         randomCpGReplacement();
     }
+    age ++;
 }
 
 void Cell::setBinSize(int binSize[]) {
@@ -99,6 +101,10 @@ void Cell::setBinSize(int binSize[]) {
 
 pair<int,int> Cell::getPair(int i) {
     return Genomes[i];
+}
+
+int Cell:getAge() {
+    return age;
 }
 
 int Cell::findBin(int CpGSite) {
