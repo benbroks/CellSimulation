@@ -1,4 +1,3 @@
-#include <iostream>
 #include <fstream>
 #include <utility>
 #include <sstream>
@@ -13,7 +12,7 @@ using namespace std;
 
 string paramFile = "param.h";
 string cpgFile = "cpg.csv";
-string line, i_fp, o_fp;
+string line, i_fp, m_o_fp, s_o_fp;
 int N, T;
 double S, R, E;
 
@@ -42,13 +41,18 @@ void findParam() {
             int afterEqual = line.find("=") + 1;
             i_fp = line.substr(afterEqual,line.length());
         }
-        else if (line[0] == 'o') {
+        else if (line[0] == 'm') {
             int afterEqual = line.find("=") + 1;
-            o_fp = line.substr(afterEqual,line.length());
+            m_o_fp = line.substr(afterEqual,line.length());
+        }
+        else if (line[0] == 's') {
+            int afterEqual = line.find("=") + 1;
+            s_o_fp = line.substr(afterEqual,line.length());
         }
     }
 }
 
+// Reads Excel file to obtain CpG distribution
 int * findCPG(int * binSize) {
     ifstream input(cpgFile);
     int i = 0;
@@ -74,18 +78,35 @@ int * findCPG(int * binSize) {
 }
 
 // Calculate final mean
-double findMean(Cell * Cells) {
-    int s = 0;
+double findMean(Cell * Cells, ofstream & o) {
+    Cell c;
+    // Instantiate Average Array
+    float avg[27634];
+    for(int i = 0; i < 27634; i++) {
+        avg[i] = 0;
+    }
+    // Find Overall Average
     for(int i = 0; i < N; i++) {
+        c = Cells[i];
         for(int j = 0; j < 27634; j++) {
-            s += Cells[i].getPair(j).first + Cells[i].getPair(j).second;
+            avg[j] += Cells[i].getPair(j).first + Cells[i].getPair(j).second;
         }
     }
+    float s = 0;
+    o << "CgP Averages,";
+    for(int i = 0; i < 27634;i++) {
+        s += avg[i];
+        o << avg[i] / (2*N) << ",";
+    }
+    o << endl;
     double mu = s / (double(2) * 27634 * N);
+    o << "Mean," << mu << endl;
+    cout << "Mean: " << mu << endl;
     return mu;
 }
 
-double findVariance(Cell * Cells, double mean) {
+// Calculate Final Variance
+void findVariance(Cell * Cells, double mean, ofstream & o) {
     double col_mean = 0;
     double var = 0;
     for(int i = 0; i < 27634; i++) {
@@ -95,8 +116,8 @@ double findVariance(Cell * Cells, double mean) {
         }
         var += (col_mean/N - mean) * (col_mean/N - mean);
     }
-    return var / 27634;
-    
+    o << "Variance," << var / 27634 << endl;
+    cout << "Variance: " << var / 27634 << endl;
 }
 
 // Calculates final CgP Concentration
@@ -129,6 +150,37 @@ void histogram(Cell * Cells) {
     delete [] Density;
 }
 
+void printFinalState(string o_fp, Cell * Cells) {
+    ofstream myfile;
+    myfile.open(o_fp); 
+    // Print Header
+    myfile << "Cell \\ CpG Site,";
+    for (int i = 0; i < 27634; i++) {
+        myfile << i << ",";
+    }
+    myfile << endl;
+    // Print Cells
+    for (int i = 0; i < N; i++) {
+        myfile << i << ",";
+        Cells[i].print(myfile);
+    }
+    myfile.close();
+}
+
+// Prints relevant statistics
+void printStats(string o_fp, Cell * Cells) {
+    ofstream myfile;
+    myfile.open(o_fp); 
+    // Print Header
+    myfile << "CgP Sites,";
+    for(int i = 0; i < 27634; i++) {
+        myfile << i << ",";
+    }
+    myfile << endl;
+    double mu = findMean(Cells,myfile);
+    findVariance(Cells, mu,myfile);
+}
+
 int main(int argc, char *argv[]){
     findParam();
     int binSize[51];
@@ -154,11 +206,10 @@ int main(int argc, char *argv[]){
         cout << "Completed " << i + 1 << " of " << T << " transitions. " << "Approximately " << T/float(i+1) * elapsed_seconds.count() - elapsed_seconds.count() <<" seconds remaining." << "\r";
         cout.flush();
     }
-    double mu = findMean(Cells);
-    double var = findVariance(Cells, mu);
     cout << endl;
-    cout << "Mean: " << mu << endl;
-    cout << "Variance: " << var << endl;
+    // Print Final Matrix and Statistics.
+    printStats(s_o_fp, Cells);
+    printFinalState(m_o_fp, Cells);
 
     delete [] Cells;
 	return 1;

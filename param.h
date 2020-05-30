@@ -1,8 +1,9 @@
-N=1000
-T=100
+N=500
+T=5
 S=0.001
 R=0.0001
 A=10
 E=0.1
 init_table_fp=init.csv
-output_fp=answer.csv
+matrix_output_fp=matrix.csv
+stats_output_fp=stats.csv

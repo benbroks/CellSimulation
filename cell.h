@@ -1,4 +1,7 @@
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include <random>
 
 using namespace std;
 
@@ -8,10 +11,13 @@ class Cell {
         float S, R, E;
         int bins[51];
         int findBin(int CpGSite);
+        void randomCellReplacement();
+        void randomCpGReplacement();
         vector< pair<int, int> > Genomes;
     public:
         Cell();
         void generateGenome(float S, float R, float E);
+        void print(ofstream & o);
         void transition();
         void setBinSize(int binSize[]);
         pair<int,int> getPair(int i);
