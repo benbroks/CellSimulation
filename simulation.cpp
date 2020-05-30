@@ -11,7 +11,6 @@
 using namespace std;
 
 string paramFile = "param.h";
-string cpgFile = "cpg.csv";
 string line, i_fp, m_o_fp, s_o_fp;
 int N, T;
 double S, R, E;
@@ -54,7 +53,7 @@ void findParam() {
 
 // Reads Excel file to obtain CpG distribution
 int * findCPG(int * binSize) {
-    ifstream input(cpgFile);
+    ifstream input(i_fp);
     int i = 0;
     while(getline(input, line)) {
         if(line[0] == '%') {

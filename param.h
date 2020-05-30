@@ -1,9 +1,21 @@
+[Number of Cells]
 N=500
+
+[Number of Transitions] 
 T=5
+
+[Error/Flip Rate] 
 S=0.001
-R=0.0001
+
+[Random Replacement Rate] 
+R=0.0001 
+
+[Age] 
 A=10
+
+[Expansion Rate]
 E=0.1
-init_table_fp=init.csv
+
+init_table_fp=cpg.csv
 matrix_output_fp=matrix.csv
 stats_output_fp=stats.csv
