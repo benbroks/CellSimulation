@@ -36,7 +36,7 @@ void findParam() {
             E = stof(line.substr(2,line.length()));
         }
         else if (line[0] == 'O') {
-            E = stof(line.substr(3,line.length()));
+            OR = stof(line.substr(3,line.length()));
         }
         else if (line[0] == 'i') {
             int afterEqual = line.find("=") + 1;

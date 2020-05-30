@@ -10,12 +10,14 @@ Colony::Colony(int N, double S, double R, double OR, double E, int binSize[], bo
     expansionRate = E;
     verbose = V;
 
-    replacePerTransition = int(OR * N);
+    replacePerTransition = int(OR * double(N));
     orderedReplacementCounter = 0;
-    if ((N % replacePerTransition) != 0) {
-        cout << "Ordered Replacement Proportion does not evenly divide N. Undefined behavior to follow." << endl;
+    if (replacePerTransition != 0) {
+        if ((N % replacePerTransition) != 0) {
+            cout << "Ordered Replacement Proportion does not evenly divide N. Undefined behavior to follow." << endl;
+        }
     }
-
+    
     Cells = new Cell[N];
     if (verbose) {
         cout << "Begin Simulation." << endl;
@@ -95,6 +97,7 @@ void Colony::transition(int T) {
             for(int j = orderedReplacementCounter; j < orderedReplacementCounter + replacePerTransition; j++) {
                 Cells[j].cellReplacement();
             }
+            orderedReplacementCounter = (orderedReplacementCounter + replacePerTransition) % numCells;
         } 
         // Normal Transition
         for(int j = 0; j < numCells; j++) {
