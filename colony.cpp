@@ -31,7 +31,7 @@ Colony::Colony(int N, int X, double S, double R, double OR, double E, double M, 
     }
     for (int i = 0; i < N; i++) {
         Cells[i].setBinSize(binSize);
-        Cells[i].generateGenome(S,R);
+        Cells[i].generateGenome(S);
     }
     if (verbose) {
         cout << "Cells instantiated." << endl;
@@ -45,15 +45,13 @@ Colony::~Colony()
 
 // Calculate mean array
 void Colony::findMeanArray(double * avg) {
-    Cell c;
     for(int i = 0; i < numGenomes; i++) {
         avg[i] = 0;
     }
     // Find Overall Average
     for(int i = 0; i < numCells; i++) {
-        c = Cells[i];
         for(int j = 0; j < numGenomes; j++) {
-            avg[j] += Cells[i].getPair(j).first + Cells[i].getPair(j).second;
+            avg[j] += Cells[i].getCpG(j);
         }
     }
     for (int i = 0; i < numGenomes; i++) {
@@ -189,8 +187,7 @@ void Colony::printFinalState(string o_fp) {
     for (int i = 0; i < numCells; i++) {
         myfile << i << "," << Cells[i].getAge() << ",";
         for(int j = 0; j < numGenomes / 2; j++) {
-            p = Cells[i].getPair(j);
-            myfile << (p.first + p.second) / float(2) << ",";
+            myfile << Cells[i].getCpG(j) / float(2) << ",";
         }
         myfile << endl;
     }
@@ -208,8 +205,8 @@ void Colony::printFinalState(string o_fp) {
     for (int i = 0; i < numCells; i++) {
         myfile << i << "," << Cells[i].getAge() << ",";
         for(int j = numGenomes/2; j < numGenomes; j++) {
-            p = Cells[i].getPair(j);
-            myfile << (p.first + p.second) / float(2) << ",";
+
+            myfile << Cells[i].getCpG(j) / float(2) << ",";
         }
         myfile << endl;
     }

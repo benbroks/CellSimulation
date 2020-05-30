@@ -8,19 +8,19 @@ using namespace std;
 class Cell {
     private:
         int CpGBoxes, age;
-        float S, R;
+        float flipRate;
         int bins[51];
         int findBin(int CpGSite);
         void randomCpGReplacement();
-        vector< pair<int, int> > Genomes;
+        int Genomes[27634];
     public:
         Cell();
-        void generateGenome(float S, float R);
+        void generateGenome(float S);
         void cellReplacement();
         void transition();
         void setBinSize(int binSize[]);
-        pair<int,int> getPair(int i);
         int getAge();
+        int getCpG(int i);
         void clearAge();
         
 };

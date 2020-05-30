@@ -2,7 +2,7 @@
 N=250
 
 [Number of Transitions] 
-T=30
+T=10
 
 [Error/Flip Rate] 
 S=0.001
@@ -11,10 +11,10 @@ S=0.001
 R=0
 
 [Orderly Replacement Rate]
-OR=0.01
+OR=0
 
 [Neoplasia Cycle]
-X=10
+X=100
 
 [Expansion Rate]
 E=0.1

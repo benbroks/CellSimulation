@@ -83,36 +83,6 @@ int * findCPG(int * binSize) {
     return binSize;
 }
 
-// Calculates final CgP Concentration
-void histogram(Cell * Cells) {
-    int * Density = new int [N];
-    int H[51];
-
-    // Instantiating Occurence Arrays
-    for (int i = 0; i < N; i++) {
-        Density[i] = 0;
-        if (i < 51) {
-            H[i] = 0;
-        }
-    }
-    // Calculating Sum of CgP Sites
-    for (int i = 0; i < N; i++) {
-        for(int j = 0; j < 27634; j++) {
-            Density[i] += Cells[i].getPair(j).first + Cells[i].getPair(j).second;
-        }
-    }
-    // Placing GcP Sites in Bins
-    for (int i = 0; i < N; i++) {
-        int param = int(double(Density[i]) / (2*27634) / 0.02);
-        H[param] += 1;
-    }
-    // Printing Bins
-    for (int i = 0; i < 51; i++) {
-        cout << "Bin " << i << ": " << H[i] << endl;
-    }
-    delete [] Density;
-}
-
 int main(int argc, char *argv[]){
     findParam();
     int binSize[51];
