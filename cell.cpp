@@ -51,27 +51,27 @@ void Cell::randomCpGReplacement() {
         currentBin = findBin(i);
         // Flip GcP Values with Bin Error Probabilities
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        if (Genomes[i] < 0.5) {
+        if (Genomes[i] < 1) {
             // Methy Value
             if (r1 < currentBin*flipRate*0.02) {
-                Genomes[i] += 0.5;
+                Genomes[i] += 1;
             }
         } else {
             // Demethy Value
             if (r1 < (1-currentBin*0.02)*flipRate) {
-                Genomes[i] -= 0.5;
+                Genomes[i] -= 1;
             }
         }
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        if (Genomes[i] <= 0.5) {
+        if (Genomes[i] <= 1) {
             // Methy Value
             if (r1 < currentBin*flipRate*0.02) {
-                Genomes[i] += 0.5;
+                Genomes[i] += 1;
             }
         } else {
             // Demethy Value
             if (r1 < (1-currentBin*0.02)*flipRate) {
-                Genomes[i] -= 0.5;
+                Genomes[i] -= 1;
             }
         }
     }
@@ -92,7 +92,7 @@ int Cell::getAge() {
     return age;
 }
 
-int Cell::getCpG(int i) {
+short Cell::getCpG(int i) {
     return Genomes[i];
 }
 

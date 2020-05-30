@@ -1,8 +1,8 @@
 [Number of Cells]
-N=250
+N=2000
 
 [Number of Transitions] 
-T=10
+T=100
 
 [Error/Flip Rate] 
 S=0.001
