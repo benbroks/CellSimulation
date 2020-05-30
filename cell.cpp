@@ -29,8 +29,8 @@ void Cell::generateGenome(float S, float R, float E) {
     age = 0;
 }
 
-void Cell::randomCellReplacement() {
-    // Generate completely new Genome with Prob. R (Random Replacement)
+void Cell::cellReplacement() {
+    // Generate completely new Genome
     int currentBin = 0;
     for (int i = 0; i < CpGBoxes; i++) {
         currentBin = findBin(i);
@@ -49,6 +49,7 @@ void Cell::randomCellReplacement() {
             Genomes[i].second = 0;
         }
     }
+    age = 0;
 }
 
 void Cell::randomCpGReplacement() {
@@ -86,7 +87,7 @@ void Cell::randomCpGReplacement() {
 void Cell::transition() {
     float r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     if (r1 < R) {
-        randomCellReplacement();
+        cellReplacement();
     } else {
         randomCpGReplacement();
     }

@@ -5,7 +5,7 @@ using namespace std;
 
 class Colony {
     private:
-        int numCells, numGenomes, numBins;
+        int numCells, numGenomes, numBins, replacePerTransition, orderedReplacementCounter;
         double flipRate,replaceRate,orderedReplaceRate,expansionRate;
         bool verbose;
         Cell * Cells;

@@ -1,5 +1,39 @@
 #include "colony.h"
 
+Colony::Colony(int N, double S, double R, double OR, double E, int binSize[], bool V) {
+    numCells = N;
+    numBins = 51;
+    numGenomes = 27634;
+    flipRate = S;
+    replaceRate = R;
+    orderedReplaceRate = OR;
+    expansionRate = E;
+    verbose = V;
+
+    replacePerTransition = int(OR * N);
+    orderedReplacementCounter = 0;
+    if ((N % replacePerTransition) != 0) {
+        cout << "Ordered Replacement Proportion does not evenly divide N. Undefined behavior to follow." << endl;
+    }
+
+    Cells = new Cell[N];
+    if (verbose) {
+        cout << "Begin Simulation." << endl;
+    }
+    for (int i = 0; i < N; i++) {
+        Cells[i].setBinSize(binSize);
+        Cells[i].generateGenome(S,R,E);
+    }
+    if (verbose) {
+        cout << "Cells instantiated." << endl;
+    }
+}
+
+Colony::~Colony() 
+{ 
+    delete [] Cells;
+} 
+
 // Calculate final mean
 double Colony::findMean(ofstream & o) {
     Cell c;
@@ -49,33 +83,6 @@ void Colony::findVariance(double mean, ofstream & o) {
     }
 }
 
-Colony::~Colony() 
-{ 
-    delete [] Cells;
-} 
-
-Colony::Colony(int N, double S, double R, double OR, double E, int binSize[], bool V) {
-    numCells = N;
-    numBins = 51;
-    numGenomes = 27634;
-    flipRate = S;
-    replaceRate = R;
-    orderedReplaceRate = OR;
-    expansionRate = E;
-    verbose = V;
-    Cells = new Cell[N];
-    if (verbose) {
-        cout << "Begin Simulation." << endl;
-    }
-    for (int i = 0; i < N; i++) {
-        Cells[i].setBinSize(binSize);
-        Cells[i].generateGenome(S,R,E);
-    }
-    if (verbose) {
-        cout << "Cells instantiated." << endl;
-    }
-}
-
 void Colony::transition(int T) {
     chrono::time_point<chrono::system_clock> start, end; 
     chrono::duration<double> elapsed_seconds;
@@ -83,6 +90,13 @@ void Colony::transition(int T) {
         start = chrono::system_clock::now(); 
     }
     for(int i = 0; i < T; i++) {
+        // Ordered Cell Replacement
+        if(replacePerTransition > 0) {
+            for(int j = orderedReplacementCounter; j < orderedReplacementCounter + replacePerTransition; j++) {
+                Cells[j].cellReplacement();
+            }
+        } 
+        // Normal Transition
         for(int j = 0; j < numCells; j++) {
              Cells[j].transition();
         }

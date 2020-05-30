@@ -8,7 +8,7 @@ T=15
 S=0.001
 
 [Random Replacement Rate] 
-R=0.0001 
+R=0
 
 [Orderly Replacement Rate]
 OR=0.01
