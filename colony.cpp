@@ -17,7 +17,7 @@ Colony::Colony(int N, double S, double R, double OR, double E, int binSize[], bo
             cout << "Ordered Replacement Proportion does not evenly divide N. Undefined behavior to follow." << endl;
         }
     }
-    
+
     Cells = new Cell[N];
     if (verbose) {
         cout << "Begin Simulation." << endl;
@@ -36,11 +36,9 @@ Colony::~Colony()
     delete [] Cells;
 } 
 
-// Calculate final mean
-double Colony::findMean(ofstream & o) {
+// Calculate mean array
+void Colony::findMeanArray(double * avg) {
     Cell c;
-    // Instantiate Average Array
-    float avg[numGenomes];
     for(int i = 0; i < numGenomes; i++) {
         avg[i] = 0;
     }
@@ -51,38 +49,27 @@ double Colony::findMean(ofstream & o) {
             avg[j] += Cells[i].getPair(j).first + Cells[i].getPair(j).second;
         }
     }
-    float s = 0;
-    o << "CgP Averages,";
-    for(int i = 0; i < numGenomes;i++) {
+    for (int i = 0; i < numGenomes; i++) {
+        avg[i] = avg[i] / (2*numCells);
+    }
+}
+
+// Calculate final mean
+double Colony::findMean(double avg[]) {
+    double s = 0;
+    for(int i = 0; i < numGenomes; i++) {
         s += avg[i];
-        o << avg[i] / (2*numCells) << ",";
     }
-    o << endl;
-    double mu = s / (double(2) * numGenomes * numCells);
-    o << "Mean," << mu << endl;
-    if (verbose) {
-        // Print to command line
-        cout << "Mean: " << mu << endl;
-    }
-    return mu;
+    return s / (numGenomes);
 }
 
 // Calculate Final Variance
-void Colony::findVariance(double mean, ofstream & o) {
-    double col_mean = 0;
+double Colony::findVariance(double mean, double avg[]) {
     double var = 0;
     for(int i = 0; i < numGenomes; i++) {
-        col_mean = 0;
-        for(int j = 0; j < numCells; j++) {
-            col_mean += (Cells[j].getPair(i).first + Cells[j].getPair(i).second) / double(2);
-        }
-        var += (col_mean/numCells - mean) * (col_mean/numCells - mean);
+        var += (avg[i] - mean) * (avg[i] - mean);
     }
-    o << "Variance," << var / numGenomes << endl;
-    if (verbose) {
-        // Print to command line
-        cout << "Variance: " << var / numGenomes << endl;
-    }
+    return var / numGenomes;
 }
 
 void Colony::transition(int T) {
@@ -118,14 +105,22 @@ void Colony::transition(int T) {
 void Colony::printStats(string o_fp) {
     ofstream myfile;
     myfile.open(o_fp); 
-    // Print Header
-    myfile << "CgP Sites,";
-    for(int i = 0; i < numGenomes; i++) {
-        myfile << i << ",";
+    double avg[numGenomes];
+    findMeanArray(avg);
+    double mu = findMean(avg);
+    double var = findVariance(mu,avg);
+    if (verbose) {
+        cout << "Mean: " << mu << endl;
+        cout << "Variance: " << var << endl;
     }
-    myfile << endl;
-    double mu = findMean(myfile);
-    findVariance(mu,myfile);
+    myfile << "CgP Site,CgP Site Average,,Mean," << mu << endl;
+    for(int i = 0; i < numGenomes; i++) {
+        myfile << i << "," << avg[i];
+        if (i == 0) {
+            myfile << ",,Variance," << var;
+        }
+        myfile << endl;
+    }
     myfile.close();
 }
 
