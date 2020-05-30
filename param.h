@@ -1,14 +1,14 @@
 [Number of Cells]
-N=2000
+N=250
 
 [Number of Transitions] 
-T=100
+T=20
 
 [Error/Flip Rate] 
 S=0.001
 
 [Random Replacement Rate] 
-R=0
+R=0.5
 
 [Orderly Replacement Rate]
 OR=0
@@ -17,7 +17,7 @@ OR=0
 X=100
 
 [Expansion Rate]
-E=0.1
+E=0
 
 [Max Expansion Proportion]
 M=0.8

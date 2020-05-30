@@ -32,7 +32,7 @@ void Cell::cellReplacement() {
     for (int i = 0; i < CpGBoxes; i++) {
         currentBin = findBin(i);
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        if (r1 < 0.004 * currentBin * currentBin) {
+        if (r1 < 0.0004 * currentBin * currentBin) {
             Genomes[i] = 2;
         
         } else if (r1 < 0.04 * currentBin * (1 - .01 * currentBin)) {
