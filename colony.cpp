@@ -130,15 +130,14 @@ void Colony::printFinalState(string o_fp) {
     // Print first half of CpG sites to one file
     myfile.open(o_fp + "1.csv");
     // Header
-    myfile << "Cell \\ CpG Site,";
+    myfile << "Cell \\ CpG Site,Age,";
     for (int i = 0; i < numGenomes/2; i++) {
         myfile << i << ",";
     }
     myfile << endl;
     // Print Cells
-
     for (int i = 0; i < numCells; i++) {
-        myfile << i << ",";
+        myfile << i << "," << Cells[i].getAge() << ",";
         for(int j = 0; j < numGenomes / 2; j++) {
             p = Cells[i].getPair(j);
             myfile << (p.first + p.second) / float(2) << ",";
@@ -150,14 +149,14 @@ void Colony::printFinalState(string o_fp) {
     // Print back half of CpG sites to another file
     myfile.open(o_fp + "2.csv");
     // Header
-    myfile << "Cell \\ CpG Site,";
+    myfile << "Cell \\ CpG Site,Age,";
     for (int i = numGenomes/2; i < numGenomes; i++) {
         myfile << i << ",";
     }
     myfile << endl;
     // Print Cells
     for (int i = 0; i < numCells; i++) {
-        myfile << i << ",";
+        myfile << i << "," << Cells[i].getAge() << ",";
         for(int j = numGenomes/2; j < numGenomes; j++) {
             p = Cells[i].getPair(j);
             myfile << (p.first + p.second) / float(2) << ",";
