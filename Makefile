@@ -1,7 +1,7 @@
 all: simulation
 
-simulation: simulation.cpp cell.cpp
-	g++ -g -Wall simulation.cpp cell.cpp -o simulation
+simulation: simulation.cpp cell.cpp colony.cpp
+	g++ -g -Wall simulation.cpp cell.cpp colony.cpp -o simulation
 
 clean:
 	rm simulation

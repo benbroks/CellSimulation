@@ -103,7 +103,7 @@ pair<int,int> Cell::getPair(int i) {
     return Genomes[i];
 }
 
-int Cell:getAge() {
+int Cell::getAge() {
     return age;
 }
 

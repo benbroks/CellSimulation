@@ -4,8 +4,8 @@
 #include <string>
 #include <stdlib.h>
 #include <cmath>
-#include <chrono> 
-#include "cell.h"
+
+#include "colony.h"
 
 
 using namespace std;
@@ -74,51 +74,6 @@ int * findCPG(int * binSize) {
     return binSize;
 }
 
-// Calculate final mean
-double findMean(Cell * Cells, ofstream & o) {
-    Cell c;
-    // Instantiate Average Array
-    float avg[27634];
-    for(int i = 0; i < 27634; i++) {
-        avg[i] = 0;
-    }
-    // Find Overall Average
-    for(int i = 0; i < N; i++) {
-        c = Cells[i];
-        for(int j = 0; j < 27634; j++) {
-            avg[j] += Cells[i].getPair(j).first + Cells[i].getPair(j).second;
-        }
-    }
-    float s = 0;
-    o << "CgP Averages,";
-    for(int i = 0; i < 27634;i++) {
-        s += avg[i];
-        o << avg[i] / (2*N) << ",";
-    }
-    o << endl;
-    double mu = s / (double(2) * 27634 * N);
-    o << "Mean," << mu << endl;
-    // Print to command line
-    cout << "Mean: " << mu << endl;
-    return mu;
-}
-
-// Calculate Final Variance
-void findVariance(Cell * Cells, double mean, ofstream & o) {
-    double col_mean = 0;
-    double var = 0;
-    for(int i = 0; i < 27634; i++) {
-        col_mean = 0;
-        for(int j = 0; j < N; j++) {
-            col_mean += (Cells[j].getPair(i).first + Cells[j].getPair(i).second) / double(2);
-        }
-        var += (col_mean/N - mean) * (col_mean/N - mean);
-    }
-    o << "Variance," << var / 27634 << endl;
-    // Print to command line
-    cout << "Variance: " << var / 27634 << endl;
-}
-
 // Calculates final CgP Concentration
 void histogram(Cell * Cells) {
     int * Density = new int [N];
@@ -149,67 +104,17 @@ void histogram(Cell * Cells) {
     delete [] Density;
 }
 
-void printFinalState(string o_fp, Cell * Cells) {
-    ofstream myfile;
-    myfile.open(o_fp); 
-    // Print Header
-    myfile << "Cell \\ CpG Site,";
-    for (int i = 0; i < 27634; i++) {
-        myfile << i << ",";
-    }
-    myfile << endl;
-    // Print Cells
-    for (int i = 0; i < N; i++) {
-        myfile << i << ",";
-        Cells[i].print(myfile);
-    }
-    myfile.close();
-}
-
-// Prints relevant statistics
-void printStats(string o_fp, Cell * Cells) {
-    ofstream myfile;
-    myfile.open(o_fp); 
-    // Print Header
-    myfile << "CgP Sites,";
-    for(int i = 0; i < 27634; i++) {
-        myfile << i << ",";
-    }
-    myfile << endl;
-    double mu = findMean(Cells,myfile);
-    findVariance(Cells, mu,myfile);
-}
-
 int main(int argc, char *argv[]){
     findParam();
     int binSize[51];
     findCPG(binSize);
     srand (static_cast <unsigned> (time(0)));
-    cout << "Begin Simulation." << endl;
-    Cell * Cells = new Cell [N];
-    for (int i = 0; i < N; i++) {
-        Cells[i].setBinSize(binSize);
-        Cells[i].generateGenome(S,R,E);
-    }
-    cout << "Cells instantiated." << endl;
-    // Simulate T Transitions
-    chrono::time_point<chrono::system_clock> start, end; 
-    chrono::duration<double> elapsed_seconds;
-    start = chrono::system_clock::now(); 
-    for(int i = 0; i < T; i++) {
-        for(int j = 0; j < N; j++) {
-             Cells[j].transition();
-        }
-        end = chrono::system_clock::now(); 
-        elapsed_seconds = end - start; 
-        cout << "Completed " << i + 1 << " of " << T << " transitions. " << "Approximately " << T/float(i+1) * elapsed_seconds.count() - elapsed_seconds.count() <<" seconds remaining." << "\r";
-        cout.flush();
-    }
-    cout << endl;
+    // Instantiate
+    Colony c = Colony(N, S, R, 0.5, E, binSize, true);
+    // Transition
+    c.transition(T);
     // Print Final Matrix and Statistics.
-    printStats(s_o_fp, Cells);
-    printFinalState(m_o_fp, Cells);
-
-    delete [] Cells;
+    c.printStats(s_o_fp);
+    c.printFinalState(m_o_fp);
 	return 1;
 }
