@@ -16,7 +16,6 @@ class Cell {
     public:
         Cell();
         void generateGenome(float S, float R, float E);
-        void print(ofstream & o);
         void cellReplacement();
         void transition();
         void setBinSize(int binSize[]);

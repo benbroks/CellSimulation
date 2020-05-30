@@ -126,17 +126,43 @@ void Colony::printStats(string o_fp) {
 
 void Colony::printFinalState(string o_fp) {
     ofstream myfile;
-    myfile.open(o_fp); 
-    // Print Header
+    pair<int,int> p;
+    // Print first half of CpG sites to one file
+    myfile.open(o_fp + "1.csv");
+    // Header
     myfile << "Cell \\ CpG Site,";
-    for (int i = 0; i < numGenomes; i++) {
+    for (int i = 0; i < numGenomes/2; i++) {
+        myfile << i << ",";
+    }
+    myfile << endl;
+    // Print Cells
+
+    for (int i = 0; i < numCells; i++) {
+        myfile << i << ",";
+        for(int j = 0; j < numGenomes / 2; j++) {
+            p = Cells[i].getPair(j);
+            myfile << (p.first + p.second) / float(2) << ",";
+        }
+        myfile << endl;
+    }
+    myfile.close();
+
+    // Print back half of CpG sites to another file
+    myfile.open(o_fp + "2.csv");
+    // Header
+    myfile << "Cell \\ CpG Site,";
+    for (int i = numGenomes/2; i < numGenomes; i++) {
         myfile << i << ",";
     }
     myfile << endl;
     // Print Cells
     for (int i = 0; i < numCells; i++) {
         myfile << i << ",";
-        Cells[i].print(myfile);
+        for(int j = numGenomes/2; j < numGenomes; j++) {
+            p = Cells[i].getPair(j);
+            myfile << (p.first + p.second) / float(2) << ",";
+        }
+        myfile << endl;
     }
     myfile.close();
 }

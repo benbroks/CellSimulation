@@ -117,12 +117,3 @@ int Cell::findBin(int CpGSite) {
     return b;
 }
 
-void Cell::print(ofstream & o) {
-    for(int i = 0; i < CpGBoxes; i++) {
-        float avg = (Genomes[i].first + Genomes[i].second) / float(2);
-        o << avg;
-        o << ",";
-    }
-    o << "\n";
-}
-

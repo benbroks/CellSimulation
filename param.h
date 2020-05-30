@@ -20,5 +20,5 @@ A=10
 E=0.1
 
 init_table_fp=cpg.csv
-matrix_output_fp=matrix.csv
+matrix_output_fp=matrix
 stats_output_fp=stats.csv
