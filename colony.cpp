@@ -1,6 +1,6 @@
 #include "colony.h"
 
-Colony::Colony(int N, double S, double R, double OR, double E, int binSize[], bool V) {
+Colony::Colony(int N, int X, double S, double R, double OR, double E, double M, int binSize[], bool V) {
     numCells = N;
     numBins = 51;
     numGenomes = 27634;
@@ -9,6 +9,13 @@ Colony::Colony(int N, double S, double R, double OR, double E, int binSize[], bo
     orderedReplaceRate = OR;
     expansionRate = E;
     verbose = V;
+    neoplasticCycle = X;
+    maxExpansionProportion = M;
+
+    neoplasticCells.clear();
+    for(int i = 0; i < numCells; i++) {
+        healthyCells.insert(i);
+    }
 
     replacePerTransition = int(OR * double(N));
     orderedReplacementCounter = 0;
@@ -24,7 +31,7 @@ Colony::Colony(int N, double S, double R, double OR, double E, int binSize[], bo
     }
     for (int i = 0; i < N; i++) {
         Cells[i].setBinSize(binSize);
-        Cells[i].generateGenome(S,R,E);
+        Cells[i].generateGenome(S,R);
     }
     if (verbose) {
         cout << "Cells instantiated." << endl;
@@ -75,20 +82,33 @@ double Colony::findVariance(double mean, double avg[]) {
 void Colony::transition(int T) {
     chrono::time_point<chrono::system_clock> start, end; 
     chrono::duration<double> elapsed_seconds;
+    float r1;
     if (verbose) {
         start = chrono::system_clock::now(); 
     }
     for(int i = 0; i < T; i++) {
+        // Row/Cell Expansion
+        if(i >= neoplasticCycle) {
+            cellExpansion();
+        } 
         // Ordered Cell Replacement
         if(replacePerTransition > 0) {
             for(int j = orderedReplacementCounter; j < orderedReplacementCounter + replacePerTransition; j++) {
                 Cells[j].cellReplacement();
+                healthyCells.insert(j);
+                neoplasticCells.erase(j);
             }
             orderedReplacementCounter = (orderedReplacementCounter + replacePerTransition) % numCells;
         } 
         // Normal Transition
         for(int j = 0; j < numCells; j++) {
-             Cells[j].transition();
+            r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            if (r1 < replaceRate) {
+                Cells[j].cellReplacement();
+                healthyCells.insert(j);
+                neoplasticCells.erase(j);
+            }
+            Cells[j].transition();
         }
         if (verbose) {
             end = chrono::system_clock::now(); 
@@ -99,6 +119,36 @@ void Colony::transition(int T) {
     }
     if(verbose) {
         cout << endl;
+    }
+}
+
+void Colony::cellExpansion() {
+    float r1;
+    int randomHealthy;
+    if(neoplasticCells.empty()) {
+        neoplasticCells.insert(rand() % numCells);
+    } else {
+        set <int, greater <int> > :: iterator itr1;
+        set <int, greater <int> > :: iterator itr2;
+        for(itr1 = neoplasticCells.begin(); itr1 != neoplasticCells.end(); itr1++) {
+            // Only expand if we are allowed to
+            if (neoplasticCells.size() < maxExpansionProportion * numCells) {
+                r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+                // Only expands if cell is randomly chosen
+                if (r1 < expansionRate) {
+                    // Picks random healthy cell to replace
+                    randomHealthy = rand() % healthyCells.size();
+                    itr2 = healthyCells.begin();
+                    for(int i = 0; i < randomHealthy; i++) {
+                        itr2++;
+                    }
+                    Cells[*itr2] = Cells[*itr1];
+                    Cells[*itr2].clearAge();
+                    neoplasticCells.insert(*itr2);
+                    healthyCells.erase(itr2);
+                }
+            }
+        }
     }
 }
 

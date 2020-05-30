@@ -1,8 +1,8 @@
 [Number of Cells]
-N=500
+N=250
 
 [Number of Transitions] 
-T=15
+T=30
 
 [Error/Flip Rate] 
 S=0.001
@@ -13,11 +13,14 @@ R=0
 [Orderly Replacement Rate]
 OR=0.01
 
-[Age] 
-A=10
+[Neoplasia Cycle]
+X=10
 
 [Expansion Rate]
 E=0.1
+
+[Max Expansion Proportion]
+M=0.8
 
 init_table_fp=cpg.csv
 matrix_output_fp=matrix

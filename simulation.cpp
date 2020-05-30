@@ -13,7 +13,7 @@ using namespace std;
 string paramFile = "param.h";
 string line, i_fp, m_o_fp, s_o_fp;
 int N, T;
-double S, R, OR, E;
+double S, R, OR, X, E, M;
 
 // Goes through parameter file to obtain N,T,S,R,E values and relevant file paths
 
@@ -32,11 +32,17 @@ void findParam() {
         else if (line[0] == 'R') {
             R = stof(line.substr(2,line.length()));
         }
+        else if (line[0] == 'O') {
+            OR = stof(line.substr(3,line.length()));
+        }
+        else if (line[0] == 'X') {
+            X = stof(line.substr(2,line.length()));
+        }
         else if (line[0] == 'E') {
             E = stof(line.substr(2,line.length()));
         }
-        else if (line[0] == 'O') {
-            OR = stof(line.substr(3,line.length()));
+        else if (line[0] == 'M') {
+            M = stof(line.substr(2,line.length()));
         }
         else if (line[0] == 'i') {
             int afterEqual = line.find("=") + 1;
@@ -113,7 +119,7 @@ int main(int argc, char *argv[]){
     findCPG(binSize);
     srand (static_cast <unsigned> (time(0)));
     // Instantiate
-    Colony c = Colony(N, S, R, OR, E, binSize, true);
+    Colony c = Colony(N, X, S, R, OR, E, M, binSize, true);
     // Transition
     c.transition(T);
     // Print Final Matrix and Statistics.
