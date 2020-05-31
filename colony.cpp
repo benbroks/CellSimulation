@@ -127,7 +127,7 @@ void Colony::cellExpansion() {
         neoplasticCells.insert(rand() % numCells);
     } else {
         set <int, greater <int> > :: iterator itr1;
-        unordered_set <int, greater <int> > :: iterator itr2;
+        unordered_set <int> :: iterator itr2;
         for(itr1 = neoplasticCells.begin(); itr1 != neoplasticCells.end(); itr1++) {
             // Only expand if we are allowed to
             if (neoplasticCells.size() < maxExpansionProportion * numCells) {

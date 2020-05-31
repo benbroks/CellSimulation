@@ -1,8 +1,8 @@
 [Number of Cells]
-N=2000
+N=500
 
 [Number of Transitions] 
-T=10000
+T=10
 
 [Error/Flip Rate] 
 S=0.001
@@ -14,10 +14,10 @@ R=0.5
 OR=0
 
 [Neoplasia Cycle]
-X=100
+X=3
 
 [Expansion Rate]
-E=0
+E=0.2
 
 [Max Expansion Proportion]
 M=0.8

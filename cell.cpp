@@ -51,33 +51,32 @@ void Cell::cellReplacement() {
 }
 
 void Cell::randomCpGReplacement() {
-    float currentBin = 0;
-    float r1;
+    float r1, sampleProb;
     for(int i = 0; i < CpGBoxes; i++) {
-        currentBin = findBin(i) * 0.02;
+        sampleProb = findBin(i) * 0.02 * flipRate;
         // Flip GcP Values with Bin Error Probabilities
         
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] < 1) {
             // Methy Value
-            if (r1 < currentBin*flipRate) {
+            if (r1 < sampleProb) {
                 Genomes[i] += 1;
             }
         } else {
             // Demethy Value
-            if (r1 < (1-currentBin)*flipRate) {
+            if (r1 < flipRate - sampleProb) {
                 Genomes[i] -= 1;
             }
         }
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] <= 1) {
             // Methy Value
-            if (r1 < currentBin*flipRate) {
+            if (r1 < sampleProb) {
                 Genomes[i] += 1;
             }
         } else {
             // Demethy Value
-            if (r1 < (1-currentBin)*flipRate) {
+            if (r1 < flipRate - sampleProb) {
                 Genomes[i] -= 1;
             }
         }
