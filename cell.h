@@ -12,7 +12,7 @@ class Cell {
         int bins[51];
         int findBin(int CpGSite);
         void randomCpGReplacement();
-        short Genomes[27634];
+        char Genomes[27634];
     public:
         Cell();
         void generateGenome(float S);
@@ -20,7 +20,7 @@ class Cell {
         void transition();
         void setBinSize(int binSize[]);
         int getAge();
-        short getCpG(int i);
+        char getCpG(int i);
         void clearAge();
         
 };

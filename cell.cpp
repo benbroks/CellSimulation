@@ -13,12 +13,15 @@ void Cell::generateGenome(float S) {
     for (int i = 0; i < CpGBoxes; i++) {
         currentBin = findBin(i);
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        // p = 0.02 * currentBin
         if (r1 < 0.0004 * currentBin * currentBin) {
+            // Prob of p*p
             Genomes[i] = 2;
-        
         } else if (r1 < 0.04 * currentBin * (1 - .01 * currentBin)) {
+            // Prob of 2*(1-p)*p
             Genomes[i] = 1;
         } else {
+            // Prob of (1-p)*(1-p)
             Genomes[i] = 0;
         }
     }
@@ -32,12 +35,15 @@ void Cell::cellReplacement() {
     for (int i = 0; i < CpGBoxes; i++) {
         currentBin = findBin(i);
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        // p = 0.02 * currentBin
         if (r1 < 0.0004 * currentBin * currentBin) {
+            // Prob of p*p
             Genomes[i] = 2;
-        
         } else if (r1 < 0.04 * currentBin * (1 - .01 * currentBin)) {
+            // Prob of 2*(1-p)*p
             Genomes[i] = 1;
         } else {
+            // Prob of (1-p)*(1-p)
             Genomes[i] = 0;
         }
     }
@@ -45,32 +51,32 @@ void Cell::cellReplacement() {
 }
 
 void Cell::randomCpGReplacement() {
-    int currentBin = 0;
+    float currentBin = 0;
     float r1;
     for(int i = 0; i < CpGBoxes; i++) {
-        currentBin = findBin(i);
+        currentBin = findBin(i) * 0.02;
         // Flip GcP Values with Bin Error Probabilities
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] < 1) {
             // Methy Value
-            if (r1 < currentBin*flipRate*0.02) {
+            if (r1 < currentBin*flipRate) {
                 Genomes[i] += 1;
             }
         } else {
             // Demethy Value
-            if (r1 < (1-currentBin*0.02)*flipRate) {
+            if (r1 < (1-currentBin)*flipRate) {
                 Genomes[i] -= 1;
             }
         }
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] <= 1) {
             // Methy Value
-            if (r1 < currentBin*flipRate*0.02) {
+            if (r1 < currentBin*flipRate) {
                 Genomes[i] += 1;
             }
         } else {
             // Demethy Value
-            if (r1 < (1-currentBin*0.02)*flipRate) {
+            if (r1 < (1-currentBin)*flipRate) {
                 Genomes[i] -= 1;
             }
         }
@@ -92,7 +98,7 @@ int Cell::getAge() {
     return age;
 }
 
-short Cell::getCpG(int i) {
+char Cell::getCpG(int i) {
     return Genomes[i];
 }
 
