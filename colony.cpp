@@ -101,6 +101,7 @@ void Colony::transition(int T) {
         // Normal Transition
         for(int j = 0; j < numCells; j++) {
             r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            // Random Replacement
             if (r1 < replaceRate) {
                 Cells[j].cellReplacement();
                 healthyCells.insert(j);
@@ -122,12 +123,11 @@ void Colony::transition(int T) {
 
 void Colony::cellExpansion() {
     float r1;
-    int randomHealthy;
     if(neoplasticCells.empty()) {
         neoplasticCells.insert(rand() % numCells);
     } else {
         set <int, greater <int> > :: iterator itr1;
-        set <int, greater <int> > :: iterator itr2;
+        unordered_set <int, greater <int> > :: iterator itr2;
         for(itr1 = neoplasticCells.begin(); itr1 != neoplasticCells.end(); itr1++) {
             // Only expand if we are allowed to
             if (neoplasticCells.size() < maxExpansionProportion * numCells) {
@@ -135,16 +135,14 @@ void Colony::cellExpansion() {
                 // Only expands if cell is randomly chosen
                 if (r1 < expansionRate) {
                     // Picks random healthy cell to replace
-                    randomHealthy = rand() % healthyCells.size();
                     itr2 = healthyCells.begin();
-                    for(int i = 0; i < randomHealthy; i++) {
-                        itr2++;
-                    }
                     Cells[*itr2] = Cells[*itr1];
                     Cells[*itr2].clearAge();
                     neoplasticCells.insert(*itr2);
-                    healthyCells.erase(itr2);
+                    healthyCells.erase(*itr2);
                 }
+            } else {
+                return;
             }
         }
     }

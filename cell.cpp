@@ -56,6 +56,7 @@ void Cell::randomCpGReplacement() {
     for(int i = 0; i < CpGBoxes; i++) {
         currentBin = findBin(i) * 0.02;
         // Flip GcP Values with Bin Error Probabilities
+        
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] < 1) {
             // Methy Value
@@ -80,6 +81,7 @@ void Cell::randomCpGReplacement() {
                 Genomes[i] -= 1;
             }
         }
+
     }
 }
 

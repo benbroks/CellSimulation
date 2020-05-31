@@ -1,5 +1,6 @@
 #include <chrono> 
 #include <set>
+#include <unordered_set>
 #include "cell.h"
 
 using namespace std;
@@ -9,7 +10,8 @@ class Colony {
         int numCells, numGenomes, numBins, replacePerTransition, orderedReplacementCounter, neoplasticCycle;
         double flipRate,replaceRate,orderedReplaceRate,expansionRate,maxExpansionProportion;
         bool verbose;
-        set<int> neoplasticCells, healthyCells;
+        set<int> neoplasticCells;
+        unordered_set<int> healthyCells;
         Cell * Cells;
         void findMeanArray(double avg[]);
         double findMean(double avg[]);
