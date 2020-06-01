@@ -7,8 +7,8 @@ using namespace std;
 
 class Colony {
     private:
-        int numCells, numGenomes, numBins, replacePerTransition, orderedReplacementCounter, neoplasticCycle;
-        double flipRate,replaceRate,orderedReplaceRate,expansionRate,maxExpansionProportion;
+        int numCells, numGenomes, numBins, orderedReplacementCounter, neoplasticCycle;
+        double flipRate,replaceRate,orderedReplaceRate,expansionRate,maxExpansionProportion,replacePerTransition;
         bool verbose;
         set<int> neoplasticCells, healthyCells;
         Cell * Cells;

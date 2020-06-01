@@ -15,14 +15,9 @@ Colony::Colony(int N, int X, double S, double R, double OR, double E, double M, 
     for(int i = 0; i < numCells; i++) {
         healthyCells.insert(i);
     }
-
-    replacePerTransition = int(OR * double(N));
+   
+    replacePerTransition = OR * double(N);
     orderedReplacementCounter = 0;
-    if (replacePerTransition != 0) {
-        if ((N % replacePerTransition) != 0) {
-            cout << "Ordered Replacement Proportion does not evenly divide N. Undefined behavior to follow." << endl;
-        }
-    }
 
     Cells = new Cell[N];
     if (verbose) {
@@ -119,12 +114,18 @@ void Colony::transition(int T) {
         } 
         // Ordered Cell Replacement
         if(replacePerTransition > 0) {
-            for(int j = orderedReplacementCounter; j < orderedReplacementCounter + replacePerTransition; j++) {
-                Cells[j].cellReplacement();
-                healthyCells.insert(j);
-                neoplasticCells.erase(j);
+            int replaced = 0;
+            while (replaced < replacePerTransition) {
+                Cells[orderedReplacementCounter].cellReplacement();
+                healthyCells.insert(orderedReplacementCounter);
+                neoplasticCells.erase(orderedReplacementCounter);
+                if (orderedReplacementCounter == numCells) {
+                    orderedReplacementCounter = 0;
+                } else {
+                    orderedReplacementCounter++;
+                }
+                replaced++;
             }
-            orderedReplacementCounter = (orderedReplacementCounter + replacePerTransition) % numCells;
         } 
         // Normal Transition
         for(int j = 0; j < numCells; j++) {

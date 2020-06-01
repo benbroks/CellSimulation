@@ -1,26 +1,26 @@
 [Number of Cells]
-N=500
+N=100
 
 [Number of Transitions] 
-T=20
+T=100
 
 [Error/Flip Rate] 
-S=.001
+S=0
 
 [Random Replacement Rate] 
 R=0
 
 [Orderly Replacement Rate]
-OR=0
+OR=0.01
 
 [Neoplasia Cycle]
-X=3
+X=101
 
 [Expansion Rate]
-E=0.3
+E=0
 
 [Max Expansion Proportion]
-M=0.8
+M=0
 
 [Random Seed - Use "-1" if you want to seed using time]
 A=11
