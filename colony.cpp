@@ -12,7 +12,6 @@ Colony::Colony(int N, int X, double S, double R, double OR, double E, double M, 
     neoplasticCycle = X;
     maxExpansionProportion = M;
 
-    neoplasticCells.clear();
     for(int i = 0; i < numCells; i++) {
         healthyCells.insert(i);
     }
@@ -45,6 +44,7 @@ Colony::~Colony()
 
 // Calculate mean array
 void Colony::findMeanArray(double * avg) {
+    // Initialize
     for(int i = 0; i < numGenomes; i++) {
         avg[i] = 0;
     }
@@ -56,6 +56,25 @@ void Colony::findMeanArray(double * avg) {
     }
     for (int i = 0; i < numGenomes; i++) {
         avg[i] = avg[i] / (2*numCells);
+    }
+}
+
+// Calculate mean array for neoplastic cells
+void Colony::findNeoplasticArray(double nAvg[]) {
+    set <int> :: iterator itr1;
+    // Initialize
+    for(int i = 0; i < numGenomes; i++) {
+        nAvg[i] = 0;
+    }
+    // Find Overall Average
+    for (itr1 = neoplasticCells.begin(); itr1 != neoplasticCells.end(); itr1++) {
+        for(int j = 0; j < numGenomes; j++) {
+            nAvg[j] += Cells[*itr1].getCpG(j);
+        }
+    }
+    // Normalize
+    for (int i = 0; i < numGenomes; i++) {
+        nAvg[i] = nAvg[i] / (2*numCells);
     }
 }
 
@@ -133,10 +152,11 @@ void Colony::transition(int T) {
 void Colony::cellExpansion() {
     float r1;
     if(neoplasticCells.empty()) {
-        neoplasticCells.insert(rand() % numCells);
+        int toAdd = rand() % numCells;
+        neoplasticCells.insert(toAdd);
+        healthyCells.erase(toAdd);
     } else {
-        set <int, greater <int> > :: iterator itr1;
-        unordered_set <int> :: iterator itr2;
+        set <int> :: iterator itr1, itr2;
         for(itr1 = neoplasticCells.begin(); itr1 != neoplasticCells.end(); itr1++) {
             // Only expand if we are allowed to
             if (neoplasticCells.size() < maxExpansionProportion * numCells) {
@@ -144,7 +164,11 @@ void Colony::cellExpansion() {
                 // Only expands if cell is randomly chosen
                 if (r1 < expansionRate) {
                     // Picks random healthy cell to replace
+                    int newCell = rand() % healthyCells.size();
                     itr2 = healthyCells.begin();
+                    for(int i = 0; i < newCell; i++) {
+                        itr2++;
+                    }
                     Cells[*itr2] = Cells[*itr1];
                     Cells[*itr2].clearAge();
                     neoplasticCells.insert(*itr2);
@@ -161,14 +185,23 @@ void Colony::printStats(string o_fp) {
     ofstream myfile;
     myfile.open(o_fp); 
     double avg[numGenomes];
+    // Mean + Variance for All Cells
     findMeanArray(avg);
     double mu = findMean(avg);
     double var = findVariance(mu,avg);
-    double muAge = findMeanAge();
+    // Mean + Variance for Neoplastic Cells
+    findNeoplasticArray(avg);
+    double nMu = findMean(avg);
+    double nVar = findVariance(nMu,avg);
+    // Mean Age of Cells
+    double ageMu = findMeanAge();
     if (verbose) {
         cout << "Mean: " << mu << endl;
         cout << "Variance: " << var << endl;
-        cout << "Mean Age: " << muAge << endl;
+        cout << "Mean Age: " << ageMu << endl;
+        cout << "Neoplastic Cells: " << neoplasticCells.size() << endl;
+        cout << "Neoplastic Cell Mean: " << nMu << endl;
+        cout << "Neoplastic Cell Variance: " << nVar << endl;
     }
     myfile << "CgP Site,CgP Site Average,,Mean," << mu << endl;
     for(int i = 0; i < numGenomes; i++) {
@@ -176,8 +209,21 @@ void Colony::printStats(string o_fp) {
         if (i == 0) {
             myfile << ",,Variance," << var;
         }
-        if (i == 1) {
-            myfile << ",,Mean Age," << muAge;
+        else if (i == 1) {
+            myfile << ",,Mean Age," << ageMu;
+        } 
+        else if (i == 2) {
+            myfile << ",,Neoplastic Cells," << neoplasticCells.size();
+        }
+        else if (i == 3) {
+            if (neoplasticCells.size() > 0) {
+                myfile << ",,Neoplastic Cell Mean," << nMu;
+            }
+        }
+        else if (i == 4) {
+            if (neoplasticCells.size() > 0) {
+                myfile << ",,Neoplastic Cell Variance," << nVar;
+            }
         }
         myfile << endl;
     }

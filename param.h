@@ -2,13 +2,13 @@
 N=500
 
 [Number of Transitions] 
-T=10
+T=20
 
 [Error/Flip Rate] 
-S=1
+S=.001
 
 [Random Replacement Rate] 
-R=0.5
+R=0
 
 [Orderly Replacement Rate]
 OR=0
@@ -17,7 +17,7 @@ OR=0
 X=3
 
 [Expansion Rate]
-E=0.2
+E=0.3
 
 [Max Expansion Proportion]
 M=0.8
