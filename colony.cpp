@@ -119,7 +119,7 @@ void Colony::transition(int T) {
                 Cells[orderedReplacementCounter].cellReplacement();
                 healthyCells.insert(orderedReplacementCounter);
                 neoplasticCells.erase(orderedReplacementCounter);
-                if (orderedReplacementCounter == numCells) {
+                if (orderedReplacementCounter == (numCells-1)) {
                     orderedReplacementCounter = 0;
                 } else {
                     orderedReplacementCounter++;
