@@ -16,6 +16,7 @@ class Colony {
         void findMeanArray(double avg[]);
         double findMean(double avg[]);
         double findVariance(double mean, double avg[]);
+        double findMeanAge();
     public:
         Colony(int N, int X, double S, double R, double OR, double E, double M, int binSize[], bool v);
         ~Colony();

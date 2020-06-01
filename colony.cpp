@@ -77,6 +77,15 @@ double Colony::findVariance(double mean, double avg[]) {
     return var / numGenomes;
 }
 
+// Calculate Final Average Age
+double Colony::findMeanAge() {
+    double s = 0;
+    for(int i = 0; i < numCells; i++) {
+        s += Cells[i].getAge();
+    }
+    return s / numCells;
+}
+
 void Colony::transition(int T) {
     chrono::time_point<chrono::system_clock> start, end; 
     chrono::duration<double> elapsed_seconds;
@@ -155,15 +164,20 @@ void Colony::printStats(string o_fp) {
     findMeanArray(avg);
     double mu = findMean(avg);
     double var = findVariance(mu,avg);
+    double muAge = findMeanAge();
     if (verbose) {
         cout << "Mean: " << mu << endl;
         cout << "Variance: " << var << endl;
+        cout << "Mean Age: " << muAge << endl;
     }
     myfile << "CgP Site,CgP Site Average,,Mean," << mu << endl;
     for(int i = 0; i < numGenomes; i++) {
         myfile << i << "," << avg[i];
         if (i == 0) {
             myfile << ",,Variance," << var;
+        }
+        if (i == 1) {
+            myfile << ",,Mean Age," << muAge;
         }
         myfile << endl;
     }

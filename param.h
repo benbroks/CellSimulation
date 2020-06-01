@@ -23,7 +23,7 @@ E=0.2
 M=0.8
 
 [Random Seed - Use "-1" if you want to seed using time]
-s=1
+A=11
 
 init_table_fp=cpg.csv
 matrix_output_fp=matrix

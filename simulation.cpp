@@ -20,6 +20,7 @@ double S, R, OR, X, E, M;
 void findParam() {
     ifstream input(paramFile);
     while(getline(input, line)) {
+        cout << line << endl;
         if (line[0] == 'N') {
             N = stoi(line.substr(2,line.length()));
         }
@@ -45,8 +46,7 @@ void findParam() {
         else if (line[0] == 'M') {
             M = stof(line.substr(2,line.length()));
         }
-        else if (line[0] == 's') {
-            cout << line << endl;
+        else if (line[0] == 'A') {
             s = stoi(line.substr(2,line.length()));
         }
         else if (line[0] == 'i') {
