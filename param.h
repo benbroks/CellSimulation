@@ -5,7 +5,7 @@ N=500
 T=10
 
 [Error/Flip Rate] 
-S=0.001
+S=1
 
 [Random Replacement Rate] 
 R=0.5
@@ -21,6 +21,9 @@ E=0.2
 
 [Max Expansion Proportion]
 M=0.8
+
+[Random Seed - Use "-1" if you want to seed using time]
+s=1
 
 init_table_fp=cpg.csv
 matrix_output_fp=matrix

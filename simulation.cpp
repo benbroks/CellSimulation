@@ -12,7 +12,7 @@ using namespace std;
 
 string paramFile = "param.h";
 string line, i_fp, m_o_fp, s_o_fp;
-int N, T;
+int N, T,s;
 double S, R, OR, X, E, M;
 
 // Goes through parameter file to obtain N,T,S,R,E values and relevant file paths
@@ -27,6 +27,7 @@ void findParam() {
             T = stoi(line.substr(2,line.length()));
         }
         else if (line[0] == 'S') {
+            cout << line << endl;
             S = stof(line.substr(2,line.length()));
         }
         else if (line[0] == 'R') {
@@ -43,6 +44,10 @@ void findParam() {
         }
         else if (line[0] == 'M') {
             M = stof(line.substr(2,line.length()));
+        }
+        else if (line[0] == 's') {
+            cout << line << endl;
+            s = stoi(line.substr(2,line.length()));
         }
         else if (line[0] == 'i') {
             int afterEqual = line.find("=") + 1;
@@ -87,7 +92,11 @@ int main(int argc, char *argv[]){
     findParam();
     int binSize[51];
     findCPG(binSize);
-    srand (static_cast <unsigned> (time(0)));
+    if (s == -1) {
+        srand (static_cast <unsigned> (time(0)));
+    } else {
+        srand(s);
+    }
     // Instantiate
     Colony c = Colony(N, X, S, R, OR, E, M, binSize, true);
     // Transition
