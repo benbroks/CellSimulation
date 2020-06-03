@@ -191,9 +191,10 @@ void Colony::printStats(string o_fp) {
     double mu = findMean(avg);
     double var = findVariance(mu,avg);
     // Mean + Variance for Neoplastic Cells
-    findNeoplasticArray(avg);
-    double nMu = findMean(avg);
-    double nVar = findVariance(nMu,avg);
+    double nAvg[numGenomes];
+    findNeoplasticArray(nAvg);
+    double nMu = findMean(nAvg);
+    double nVar = findVariance(nMu,nAvg);
     // Mean Age of Cells
     double ageMu = findMeanAge();
     if (verbose) {
@@ -204,9 +205,9 @@ void Colony::printStats(string o_fp) {
         cout << "Neoplastic Cell Mean: " << nMu << endl;
         cout << "Neoplastic Cell Variance: " << nVar << endl;
     }
-    myfile << "CgP Site,CgP Site Average,,Mean," << mu << endl;
+    myfile << "CgP Site,CgP Site Average for Normal Cells,CgP Site Average for Neoplastic Cells,,Mean," << mu << endl;
     for(int i = 0; i < numGenomes; i++) {
-        myfile << i << "," << avg[i];
+        myfile << i << "," << avg[i] << "," << nAvg[i];
         if (i == 0) {
             myfile << ",,Variance," << var;
         }
@@ -214,7 +215,7 @@ void Colony::printStats(string o_fp) {
             myfile << ",,Mean Age," << ageMu;
         } 
         else if (i == 2) {
-            myfile << ",,Neoplastic Cells," << neoplasticCells.size();
+            myfile << ",,Neoplastic Cells at Simulation End," << neoplasticCells.size();
         }
         else if (i == 3) {
             if (neoplasticCells.size() > 0) {
