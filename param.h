@@ -2,7 +2,7 @@
 N=100
 
 [Number of Transitions] 
-T=100
+T=10
 
 [Error/Flip Rate] 
 S=0
@@ -14,13 +14,13 @@ R=0
 OR=0.01
 
 [Neoplasia Cycle]
-X=101
+X=5
 
 [Expansion Rate]
-E=0
+E=0.2
 
 [Max Expansion Proportion]
-M=0
+M=0.5
 
 [Random Seed - Use "-1" if you want to seed using time]
 A=11

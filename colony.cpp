@@ -69,7 +69,7 @@ void Colony::findNeoplasticArray(double nAvg[]) {
     }
     // Normalize
     for (int i = 0; i < numGenomes; i++) {
-        nAvg[i] = nAvg[i] / (2*numCells);
+        nAvg[i] = nAvg[i] / (2*neoplasticCells.size());
     }
 }
 
