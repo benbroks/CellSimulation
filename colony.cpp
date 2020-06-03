@@ -205,7 +205,7 @@ void Colony::printStats(string o_fp) {
         cout << "Neoplastic Cell Mean: " << nMu << endl;
         cout << "Neoplastic Cell Variance: " << nVar << endl;
     }
-    myfile << "CgP Site,CgP Site Average for Normal Cells,CgP Site Average for Neoplastic Cells,,Mean," << mu << endl;
+    myfile << "CgP Site,CgP Site Average for All Cells,CgP Site Average for Neoplastic Cells,,Mean," << mu << endl;
     for(int i = 0; i < numGenomes; i++) {
         myfile << i << "," << avg[i] << "," << nAvg[i];
         if (i == 0) {
