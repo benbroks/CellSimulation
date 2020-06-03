@@ -22,10 +22,11 @@
     - Outputs final state of simulation. This includes cell age AND CpG values for all ~27k sites. Output is split across two files to support MS Excel viewing.
 - stats_output_fp
     - Outputs average values across all cells for each CpG site. ~27k dimensional vector.
+    - Outputs average values across all neoplastic cells for each CpG site. ~27k dimensional vector.
     - Outputs a variety of single value statistics.
         - Mean CpG value across all sites and cells. 
         - Variance of CpG value across aforementioned average vector.
         - Mean Cell Age.
         - Number of Neoplastic Cells.
-        - Mean CpG value across all sites in NEOPLASTIC cells.
-        - Variance of CpG value across average vector for NEOPLASTIC cells.
+        - Mean CpG value across all sites in neoplastic cells.
+        - Variance of CpG value across average vector for neoplastic cells.
