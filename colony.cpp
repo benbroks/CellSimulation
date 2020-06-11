@@ -1,6 +1,6 @@
 #include "colony.h"
 
-Colony::Colony(int N, int X, double S, double R, double OR, double E, double M, int binSize[], bool V) {
+Colony::Colony(int N, int X, int P, double S, double R, double OR, double E, double M, int binSize[], bool V) {
     numCells = N;
     numBins = 51;
     numGenomes = 27634;
@@ -11,6 +11,7 @@ Colony::Colony(int N, int X, double S, double R, double OR, double E, double M, 
     verbose = V;
     neoplasticCycle = X;
     maxExpansionProportion = M;
+    statFrequency = P;
 
     for(int i = 0; i < numCells; i++) {
         healthyCells.insert(i);
@@ -100,7 +101,7 @@ double Colony::findMeanAge() {
     return s / numCells;
 }
 
-void Colony::transition(int T) {
+void Colony::transition(int T, string s_o_fp, string m_o_fp) {
     chrono::time_point<chrono::system_clock> start, end; 
     chrono::duration<double> elapsed_seconds;
     float r1;
@@ -108,6 +109,10 @@ void Colony::transition(int T) {
         start = chrono::system_clock::now(); 
     }
     for(int i = 0; i < T; i++) {
+        // Print intermediate statistics to csv files
+        if((statFrequency != -1) && (i != 0) && (i % statFrequency == 0)) {
+            printStats(s_o_fp + "_" + to_string(i),i);
+        }
         // Row/Cell Expansion
         if(i >= neoplasticCycle) {
             cellExpansion();
@@ -182,9 +187,9 @@ void Colony::cellExpansion() {
     }
 }
 
-void Colony::printStats(string o_fp) {
+void Colony::printStats(string o_fp, int numTransitions) {
     ofstream myfile;
-    myfile.open(o_fp); 
+    myfile.open(o_fp + ".csv"); 
     double avg[numGenomes];
     // Mean + Variance for All Cells
     findMeanArray(avg);
@@ -197,13 +202,18 @@ void Colony::printStats(string o_fp) {
     double nVar = findVariance(nMu,nAvg);
     // Mean Age of Cells
     double ageMu = findMeanAge();
-    if (verbose) {
+    if ((verbose) && (numTransitions == -1)) {
         cout << "Mean: " << mu << endl;
         cout << "Variance: " << var << endl;
         cout << "Mean Age: " << ageMu << endl;
         cout << "Neoplastic Cells: " << neoplasticCells.size() << endl;
         cout << "Neoplastic Cell Mean: " << nMu << endl;
         cout << "Neoplastic Cell Variance: " << nVar << endl;
+    }
+    if (numTransitions != -1) {
+        myfile << "Completed Transitions," << numTransitions << endl;
+    } else {
+        myfile << "Final State" << endl;
     }
     myfile << "CgP Site,CgP Site Average for All Cells,CgP Site Average for Neoplastic Cells,,Mean," << mu << endl;
     for(int i = 0; i < numGenomes; i++) {
@@ -232,12 +242,17 @@ void Colony::printStats(string o_fp) {
     myfile.close();
 }
 
-void Colony::printFinalState(string o_fp) {
+void Colony::printState(string o_fp, int numTransitions) {
     ofstream myfile;
     pair<int,int> p;
     // Print first half of CpG sites to one file
     myfile.open(o_fp + "1.csv");
     // Header
+    if (numTransitions != -1) {
+        myfile << "Completed Transitions," << numTransitions << endl;
+    } else {
+        myfile << "Final State" << endl;
+    }
     myfile << "Cell \\ CpG Site,Age,";
     for (int i = 0; i < numGenomes/2; i++) {
         myfile << i << ",";
@@ -256,6 +271,11 @@ void Colony::printFinalState(string o_fp) {
     // Print back half of CpG sites to another file
     myfile.open(o_fp + "2.csv");
     // Header
+    if (numTransitions != -1) {
+        myfile << "Completed Transitions," << numTransitions << endl;
+    } else {
+        myfile << "Final State" << endl;
+    }
     myfile << "Cell \\ CpG Site,Age,";
     for (int i = numGenomes/2; i < numGenomes; i++) {
         myfile << i << ",";

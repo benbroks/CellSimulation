@@ -11,9 +11,10 @@
     - E: Expansion Rate. At every transition, each neoplastic cell has an E prob. of turning a random cell into a neoplastic one.
     - M: Max Expansion Rate. The number of neoplastic cells will never exceed M*N.
     - A: Random Seed. Keep this the same to make experiments repeatable. Set it to -1 if you want a consistently random experiment.
+    - P: Statistics Return Regularity. Set P to frequency at which statistics should be returned. Set P to -1 if statistics should just print at the end. [e.g. P=100 will return statsX.csv,matrix_X_1.csv,matrix_X_2.csv for X=100,200,300,etc.]
     - init_table_fp: Gives file path to read from to obtain bin sizes.
     - matrix_output_fp: Prefix to matrix output filepaths. [e.g. Given "matrix", outputs will be "matrix1.csv" and "matrix2.csv"]
-    - stats_output_fp: Filepath for simulation statistics.
+    - stats_output_fp: Prefix to simulation statistics filepath. [e.g. Given "stats", output will be "stats.csv"]
 - init_table_fp
     - Pulls information from the Integer Bins column. (Doesn't use any other columns)
 

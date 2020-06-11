@@ -6,7 +6,4 @@ simulation: simulation.cpp cell.cpp colony.cpp
 clean:
 	rm simulation
 	rm -rf simulation.dSYM
-	rm matrix1.csv
-	rm matrix2.csv
-	rm stats.csv
 	rm .DS_Store

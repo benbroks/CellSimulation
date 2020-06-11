@@ -12,7 +12,7 @@ using namespace std;
 
 string paramFile = "param.h";
 string line, i_fp, m_o_fp, s_o_fp;
-int N, T,s;
+int N, T, P, s;
 double S, R, OR, X, E, M;
 
 // Goes through parameter file to obtain N,T,S,R,E values and relevant file paths
@@ -46,6 +46,13 @@ void findParam() {
         }
         else if (line[0] == 'A') {
             s = stoi(line.substr(2,line.length()));
+        }
+        else if (line[0] == 'P') {
+            P = stoi(line.substr(2,line.length()));
+            // Otherwise we'll get an ugly divide by zero error
+            if (P == 0) {
+                P = -1;
+            }
         }
         else if (line[0] == 'i') {
             int afterEqual = line.find("=") + 1;
@@ -96,11 +103,11 @@ int main(int argc, char *argv[]){
         srand(s);
     }
     // Instantiate
-    Colony c = Colony(N, X, S, R, OR, E, M, binSize, true);
+    Colony c = Colony(N, X, P, S, R, OR, E, M, binSize, true);
     // Transition
-    c.transition(T);
-    // Print Final Matrix and Statistics.
-    c.printStats(s_o_fp);
-    c.printFinalState(m_o_fp);
+    c.transition(T, s_o_fp, m_o_fp);
+    // Print Final Matrix and Statistics. -1 Indicates completed simulation.
+    c.printStats(s_o_fp,-1);
+    c.printState(m_o_fp,-1);
 	return 1;
 }
