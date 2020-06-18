@@ -61,7 +61,6 @@ void Cell::randomCpGReplacement() {
             sampleProb += 1;
             sampleProb *= -1 * AflipRate;
             cpgSide = true;
-            cout << "A";
         } else {
             sampleProb -= 1;
             sampleProb *= BflipRate;
