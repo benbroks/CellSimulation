@@ -6,12 +6,14 @@ Cell::Cell() {
     age = 0;
 }
 
-void Cell::generateGenome(float S) {
+void Cell::generateGenome(float C, float SA, float SB) {
     int currentBin = 0;
-    flipRate = S;
+    CpGProportion = C;
+    AflipRate = SA;
+    BflipRate = SB;
     float r1;
     for (int i = 0; i < CpGBoxes; i++) {
-        currentBin = findBin(i);
+        currentBin = abs(findBin(i)) - 1;
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         // p = 0.02 * currentBin
         if (r1 < 0.0004 * currentBin * currentBin) {
@@ -33,7 +35,7 @@ void Cell::cellReplacement() {
     int currentBin = 0;
     float r1;
     for (int i = 0; i < CpGBoxes; i++) {
-        currentBin = findBin(i);
+        currentBin = abs(findBin(i)) - 1;
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         // p = 0.02 * currentBin
         if (r1 < 0.0004 * currentBin * currentBin) {
@@ -52,8 +54,20 @@ void Cell::cellReplacement() {
 
 void Cell::randomCpGReplacement() {
     float r1, sampleProb;
+    bool cpgSide;
     for(int i = 0; i < CpGBoxes; i++) {
-        sampleProb = findBin(i) * 0.02 * flipRate;
+        sampleProb = findBin(i);
+        if (sampleProb < 0) {
+            sampleProb += 1;
+            sampleProb *= -1 * AflipRate;
+            cpgSide = true;
+            cout << "A";
+        } else {
+            sampleProb -= 1;
+            sampleProb *= BflipRate;
+            cpgSide = false;
+        }
+        sampleProb *= 0.02;
         // Flip GcP Values with Bin Error Probabilities
         
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -64,8 +78,14 @@ void Cell::randomCpGReplacement() {
             }
         } else {
             // Demethy Value
-            if (r1 < flipRate - sampleProb) {
-                Genomes[i] -= 1;
+            if (cpgSide) {
+                if (r1 < AflipRate - sampleProb) {
+                    Genomes[i] -= 1;
+                }
+            } else {
+                if (r1 < BflipRate - sampleProb) {
+                    Genomes[i] -= 1;
+                }
             }
         }
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -76,8 +96,14 @@ void Cell::randomCpGReplacement() {
             }
         } else {
             // Demethy Value
-            if (r1 < flipRate - sampleProb) {
-                Genomes[i] -= 1;
+            if (cpgSide) {
+                if (r1 < AflipRate - sampleProb) {
+                    Genomes[i] -= 1;
+                }
+            } else {
+                if (r1 < BflipRate - sampleProb) {
+                    Genomes[i] -= 1;
+                }
             }
         }
 
@@ -109,7 +135,10 @@ int Cell::findBin(int CpGSite) {
         b++;
         CpGSite -= bins[b];
     }
-    return b;
+    if ((-1 * CpGSite) <= int(CpGProportion * bins[b])) {
+        return -1 * (b+1);
+    }
+    return b+1;
 }
 
 void Cell::clearAge() {

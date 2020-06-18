@@ -4,8 +4,14 @@ N=100
 [Number of Transitions] 
 T=25
 
-[Error/Flip Rate] 
-S=0
+[CpG Site Partition Proportion]
+C=0
+
+[Error/Flip Rate for C Proportion] 
+SA=1
+
+[Error/Flip Rate for (1-C) Proportion] 
+SB=0
 
 [Random Replacement Rate] 
 R=0
@@ -14,13 +20,13 @@ R=0
 OR=0
 
 [Neoplasia Cycle]
-X=1
+X=100
 
 [Expansion Rate]
-E=0.1
+E=0
 
 [Max Expansion Proportion]
-M=0.5
+M=0
 
 [Random Seed - Use "-1" if you want to seed using time]
 A=11

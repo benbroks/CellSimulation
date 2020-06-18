@@ -1,10 +1,12 @@
 #include "colony.h"
 
-Colony::Colony(int N, int X, int P, double S, double R, double OR, double E, double M, int binSize[], bool V) {
+Colony::Colony(int N, int X, int P, double C, double SA, double SB, double R, double OR, double E, double M, int binSize[], bool V) {
     numCells = N;
     numBins = 51;
     numGenomes = 27634;
-    flipRate = S;
+    CpGProportion = C;
+    AflipRate = SA;
+    BflipRate = SB;
     replaceRate = R;
     orderedReplaceRate = OR;
     expansionRate = E;
@@ -26,7 +28,7 @@ Colony::Colony(int N, int X, int P, double S, double R, double OR, double E, dou
     }
     for (int i = 0; i < N; i++) {
         Cells[i].setBinSize(binSize);
-        Cells[i].generateGenome(S);
+        Cells[i].generateGenome(CpGProportion, AflipRate, BflipRate);
     }
     if (verbose) {
         cout << "Cells instantiated." << endl;
@@ -207,8 +209,10 @@ void Colony::printStats(string o_fp, int numTransitions) {
         cout << "Variance: " << var << endl;
         cout << "Mean Age: " << ageMu << endl;
         cout << "Neoplastic Cells: " << neoplasticCells.size() << endl;
-        cout << "Neoplastic Cell Mean: " << nMu << endl;
-        cout << "Neoplastic Cell Variance: " << nVar << endl;
+        if (neoplasticCells.size() != 0) {
+            cout << "Neoplastic Cell Mean: " << nMu << endl;
+            cout << "Neoplastic Cell Variance: " << nVar << endl;
+        }
     }
     if (numTransitions != -1) {
         myfile << "Completed Transitions," << numTransitions << endl;
