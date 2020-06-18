@@ -54,8 +54,11 @@ void Cell::cellReplacement() {
 
 void Cell::randomCpGReplacement() {
     float r1, sampleProb;
+    // Indicates which group we're in [A or B]
     bool cpgSide;
     for(int i = 0; i < CpGBoxes; i++) {
+        // Flip GcP Values with Bin Error Probabilities
+        // Checks to see which group the site falls into - this determines the error rate
         sampleProb = findBin(i);
         if (sampleProb < 0) {
             sampleProb += 1;
@@ -67,8 +70,7 @@ void Cell::randomCpGReplacement() {
             cpgSide = false;
         }
         sampleProb *= 0.02;
-        // Flip GcP Values with Bin Error Probabilities
-        
+
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] < 1) {
             // Methy Value
@@ -105,7 +107,6 @@ void Cell::randomCpGReplacement() {
                 }
             }
         }
-
     }
 }
 
@@ -134,6 +135,12 @@ int Cell::findBin(int CpGSite) {
         b++;
         CpGSite -= bins[b];
     }
+    // Added a slight "hack" here 
+    // First, we check how many CpG sites deep the cell is into a specific bin
+    // This is used to determine whether the site falls into the A or B group
+    // We return a negative number if in group A and positive if in group B
+    // However, 0 can't be turned into a negative number so we have to add 1 first
+    // The 1 is subtracted after returning the absolute value of the result if the group isn't needed
     if ((-1 * CpGSite) <= int(CpGProportion * bins[b])) {
         return -1 * (b+1);
     }

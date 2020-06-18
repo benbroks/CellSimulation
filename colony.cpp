@@ -204,11 +204,13 @@ void Colony::printStats(string o_fp, int numTransitions) {
     double nVar = findVariance(nMu,nAvg);
     // Mean Age of Cells
     double ageMu = findMeanAge();
+    // Printing to cout if need be
     if ((verbose) && (numTransitions == -1)) {
         cout << "Mean: " << mu << endl;
         cout << "Variance: " << var << endl;
         cout << "Mean Age: " << ageMu << endl;
         cout << "Neoplastic Cells: " << neoplasticCells.size() << endl;
+        // We get nan if we don't have the zero check
         if (neoplasticCells.size() != 0) {
             cout << "Neoplastic Cell Mean: " << nMu << endl;
             cout << "Neoplastic Cell Variance: " << nVar << endl;
