@@ -4,16 +4,13 @@ N=100
 [Number of Transitions] 
 T=25
 
-[CpG Site Partition Proportion]
-C=0
+[CpG Site Flip Rate Lower Bound] 
+SMin=0.001
 
-[Error/Flip Rate for C Proportion] 
-SA=1
+[CpG Site Flip Rate Upper Bound] 
+SMax=0.01
 
-[Error/Flip Rate for (1-C) Proportion] 
-SB=0
-
-[Random Replacement Rate] 
+[Random Replacement Rate]
 R=0
 
 [Orderly Replacement Rate]

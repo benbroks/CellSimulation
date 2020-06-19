@@ -1,12 +1,11 @@
 #include "colony.h"
 
-Colony::Colony(int N, int X, int P, double C, double SA, double SB, double R, double OR, double E, double M, int binSize[], bool V) {
+Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double OR, double E, double M, int binSize[], bool V) {
     numCells = N;
     numBins = 51;
     numGenomes = 27634;
-    CpGProportion = C;
-    AflipRate = SA;
-    BflipRate = SB;
+    minFlipRate = SMin;
+    maxFlipRate = SMax;
     replaceRate = R;
     orderedReplaceRate = OR;
     expansionRate = E;
@@ -14,6 +13,14 @@ Colony::Colony(int N, int X, int P, double C, double SA, double SB, double R, do
     neoplasticCycle = X;
     maxExpansionProportion = M;
     statFrequency = P;
+
+    flipRates = new double[numGenomes];
+    double rangeSize = maxFlipRate - minFlipRate;
+    double r1;
+    for(int i = 0; i < numGenomes; i++) {
+        r1 = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+        flipRates[i] = r1 * rangeSize + minFlipRate;
+    }
 
     for(int i = 0; i < numCells; i++) {
         healthyCells.insert(i);
@@ -28,7 +35,7 @@ Colony::Colony(int N, int X, int P, double C, double SA, double SB, double R, do
     }
     for (int i = 0; i < N; i++) {
         Cells[i].setBinSize(binSize);
-        Cells[i].generateGenome(CpGProportion, AflipRate, BflipRate);
+        Cells[i].generateGenome(flipRates);
     }
     if (verbose) {
         cout << "Cells instantiated." << endl;
@@ -37,6 +44,7 @@ Colony::Colony(int N, int X, int P, double C, double SA, double SB, double R, do
 
 Colony::~Colony() 
 { 
+    delete [] flipRates;
     delete [] Cells;
 } 
 

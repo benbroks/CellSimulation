@@ -8,14 +8,14 @@ using namespace std;
 class Cell {
     private:
         int CpGBoxes, age;
-        float CpGProportion,AflipRate,BflipRate;
+        double * flipRates;
         int bins[51];
         int findBin(int CpGSite);
         void randomCpGReplacement();
         char Genomes[27634];
     public:
         Cell();
-        void generateGenome(float C, float SA, float SB);
+        void generateGenome(double * flipRates);
         void cellReplacement();
         void transition();
         void setBinSize(int binSize[]);

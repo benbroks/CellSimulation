@@ -4,10 +4,9 @@
 - param.h 
     - N: Number of Cells.
     - T: Number of Cell Transitions.
-    - C: CpG Site Partition Proportion. ~27k * C sites have flip rate SA. ~27k * (1-C) sites have flip rate SB.
-    - CpG Flip Rates. Used to calculate Methy and Demethy Rates. [e.g. for Bin 0.02 -> Methy = S * 0.02 & Demethy = S * (1-0.02)]
-        - SA: Pertains to ~27k * C CpG sites.
-        - SB: Pertains to ~27k * (1-C) CpG sites.
+    - CpG Site Flip Rate is decided at simulation start along a uniform distribution. Each CpG site has a unique flip rate, it persists across cells.
+        - SMin: Lower bound of CpG Site Flip Rate.
+        - SMax: Upper bound of CpG Site Flip Rate.
     - R: Random Cell Replacement Rate. [i.e. At every transition, each cell has R prob. of regenerating with age = 0]
     - OR: Orderly Replacement Rate. [i.e. At every transition, OR*N cells will regenerate with age = 0]
     - X: Neoplasia Cycle Number. The cycle number at which a random cell becomes cancerous/neoplastic.

@@ -9,7 +9,8 @@ using namespace std;
 class Colony {
     private:
         int numCells, numGenomes, numBins, orderedReplacementCounter, neoplasticCycle, statFrequency;
-        double CpGProportion,AflipRate, BflipRate, replaceRate,orderedReplaceRate,expansionRate,maxExpansionProportion,replacePerTransition;
+        double minFlipRate, maxFlipRate, replaceRate,orderedReplaceRate,expansionRate,maxExpansionProportion,replacePerTransition;
+        double * flipRates;
         bool verbose;
         set<int> neoplasticCells, healthyCells;
         Cell * Cells;
@@ -19,7 +20,7 @@ class Colony {
         double findMeanAge();
         void findNeoplasticArray(double nAvg[]);
     public:
-        Colony(int N, int X, int P, double C, double SA, double SB, double R, double OR, double E, double M, int binSize[], bool v);
+        Colony(int N, int X, int P, double SMin, double SMax, double R, double OR, double E, double M, int binSize[], bool v);
         ~Colony();
         void transition(int T, string s_o_fp, string m_o_fp);
         void cellExpansion();
