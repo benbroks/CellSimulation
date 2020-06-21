@@ -51,21 +51,22 @@ void Cell::cellReplacement() {
 }
 
 void Cell::randomCpGReplacement() {
-    float r1, sampleProb, left, right;
+    float r1, left, right;
+    int bin;
     for(int i = 0; i < CpGBoxes; i++) {
         // Flip GcP Values with Bin Error Probabilities
         // flipRates determines the flip rate for this specific CpG site
-        sampleProb = findBin(i) * flipRates[i] * 0.02;
-        if (findBin(i) < 25) {
-            left = sampleProb;
+        bin = findBin(i);
+        if (bin < 25) {
+            left = flipRates[i] * bin / (50 - bin) * 0.02;
             right = flipRates[i];
-        } else if (findBin(i) == 25) {
+        } else if (bin == 25) {
             // Center Bins have more variance
             left = flipRates[i];
             right = flipRates[i];
         } else {
             left = flipRates[i];
-            right = flipRates[i] - sampleProb;
+            right = flipRates[i] * (50 - bin) / bin * 0.02;
         }
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] < 1) {
