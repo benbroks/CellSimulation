@@ -2,13 +2,13 @@
 N=100
 
 [Number of Transitions] 
-T=25
+T=200
 
 [CpG Site Flip Rate Lower Bound] 
-SMin=0.001
+SMin=0.0005
 
 [CpG Site Flip Rate Upper Bound] 
-SMax=0.01
+SMax=0.001
 
 [Random Replacement Rate]
 R=0
@@ -17,19 +17,19 @@ R=0
 OR=0
 
 [Neoplasia Cycle]
-X=100
+X=1
 
 [Expansion Rate]
-E=0
+E=0.1
 
 [Max Expansion Proportion]
-M=0
+M=0.9
 
 [Random Seed - Use "-1" if you want to seed using time]
 A=11
 
 [Statistics Return Regularity - Use "-1" if you just want results at the end]
-P=3
+P=25
 
 init_table_fp=cpg.csv
 matrix_output_fp=results/matrix
