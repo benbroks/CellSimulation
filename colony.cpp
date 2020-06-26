@@ -115,19 +115,15 @@ void Colony::transition(int T, string s_o_fp, string m_o_fp) {
     if (verbose) {
         start = chrono::system_clock::now(); 
     }
-    cout << "Begin keeping track of time." << endl;
     for(int i = 0; i < T; i++) {
         // Print intermediate statistics to csv files
         if((statFrequency != -1) && (i != 0) && (i % statFrequency == 0)) {
             printStats(s_o_fp + "_" + to_string(i),i);
         }
-        cout << "Got past stats print." << endl;
         // Row/Cell Expansion
         if(i >= neoplasticCycle) {
             cellExpansion();
         } 
-
-        cout << "Got past row/cell expansion." << endl;
         // Ordered Cell Replacement
         if(replacePerTransition > 0) {
             int replaced = 0;
@@ -143,7 +139,6 @@ void Colony::transition(int T, string s_o_fp, string m_o_fp) {
                 replaced++;
             }
         } 
-        cout << "Got past ordered cell replacement" << endl;
         // Normal Transition
         for(int j = 0; j < numCells; j++) {
             r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -153,9 +148,7 @@ void Colony::transition(int T, string s_o_fp, string m_o_fp) {
                 healthyCells.insert(j);
                 neoplasticCells.erase(j);
             }
-            cout << "Got past random replacement." << endl;
             Cells[j].transition();
-            cout << "Got past typical transitions." << endl;
         }
         if (verbose) {
             end = chrono::system_clock::now(); 

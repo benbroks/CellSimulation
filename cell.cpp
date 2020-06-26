@@ -58,8 +58,8 @@ void Cell::randomCpGReplacement() {
         // Flip GcP Values with Bin Error Probabilities
         // flipRates determines the flip rate for this specific CpG site
         bin = findBin(i);
-        methy = flipRates[i] * double(bin) / 50;
-        demethy = flipRates[i] * (1 - double(bin) / 50);
+        methy = flipRates[bin] * double(bin) / 50;
+        demethy = flipRates[bin] * (1 - double(bin) / 50);
         
         // One side of CpG Site
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
