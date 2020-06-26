@@ -6,9 +6,9 @@ Cell::Cell() {
     age = 0;
 }
 
-void Cell::generateGenome(double * bFR) {
+void Cell::generateGenome(double * f) {
     int currentBin = 0;
-    binFlipRates = bFR;
+    flipRates = f;
     float r1;
     for (int i = 0; i < CpGBoxes; i++) {
         currentBin = findBin(i);
@@ -31,7 +31,6 @@ void Cell::generateGenome(double * bFR) {
 void Cell::cellReplacement() {
     // Generate completely new Genome
     int currentBin = 0;
-
     float r1;
     for (int i = 0; i < CpGBoxes; i++) {
         currentBin = findBin(i);
@@ -53,27 +52,29 @@ void Cell::cellReplacement() {
 
 void Cell::randomCpGReplacement() {
     float r1;
-    double methy,demethy;
+    double left,right;
     int bin;
     for(int i = 0; i < CpGBoxes; i++) {
         // Flip GcP Values with Bin Error Probabilities
-        
-        // S is higher for "middle" bin sizes
+        // flipRates determines the flip rate for this specific CpG site
         bin = findBin(i);
-
-        methy = binFlipRates[i] * double(bin) / 50;
-        demethy = binFlipRates[i] * (1 - double(bin) / 50);
-        
+        left = flipRates[i];
+        right = flipRates[i];
+        if (bin < 25) {
+            left *= double(bin) / (50 - bin);
+        } else if (bin > 25) {
+            right *= double(50 - bin) / bin;
+        }
         // One side of CpG Site
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] < 1) {
             // Methy Value
-            if (r1 < methy) {
+            if (r1 < left) {
                 Genomes[i] += 1;
             }
         } else {
             // Demethy Value
-            if (r1 < demethy) {
+            if (r1 < right) {
                 Genomes[i] -= 1;
             }
         }
@@ -81,12 +82,12 @@ void Cell::randomCpGReplacement() {
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] <= 1) {
             // Methy Value
-            if (r1 < methy) {
+            if (r1 < left) {
                 Genomes[i] += 1;
             }
         } else {
             // Demethy Value
-            if (r1 < demethy) {
+            if (r1 < right) {
                 Genomes[i] -= 1;
             }
         
