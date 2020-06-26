@@ -14,12 +14,9 @@ Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double O
     maxExpansionProportion = M;
     statFrequency = P;
 
-    flipRates = new double[numGenomes];
-    double rangeSize = maxFlipRate - minFlipRate;
-    double r1;
-    for(int i = 0; i < numGenomes; i++) {
-        r1 = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
-        flipRates[i] = r1 * rangeSize + minFlipRate;
+    binFlipRates = new double[51];
+    for(int i = 0; i < 51; i++) {
+        binFlipRates[i] = minFlipRate + (maxFlipRate - minFlipRate) * double(abs(i - 25)) / 25;
     }
 
     for(int i = 0; i < numCells; i++) {
@@ -35,7 +32,7 @@ Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double O
     }
     for (int i = 0; i < N; i++) {
         Cells[i].setBinSize(binSize);
-        Cells[i].generateGenome(flipRates);
+        Cells[i].generateGenome(binFlipRates);
     }
     if (verbose) {
         cout << "Cells instantiated." << endl;
@@ -44,7 +41,7 @@ Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double O
 
 Colony::~Colony() 
 { 
-    delete [] flipRates;
+    delete [] binFlipRates;
     delete [] Cells;
 } 
 

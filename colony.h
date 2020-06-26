@@ -10,7 +10,7 @@ class Colony {
     private:
         int numCells, numGenomes, numBins, orderedReplacementCounter, neoplasticCycle, statFrequency;
         double minFlipRate, maxFlipRate, replaceRate,orderedReplaceRate,expansionRate,maxExpansionProportion,replacePerTransition;
-        double * flipRates;
+        double * binFlipRates;
         bool verbose;
         set<int> neoplasticCells, healthyCells;
         Cell * Cells;
