@@ -52,29 +52,25 @@ void Cell::cellReplacement() {
 
 void Cell::randomCpGReplacement() {
     float r1;
-    double left,right;
+    double methy,demethy;
     int bin;
     for(int i = 0; i < CpGBoxes; i++) {
         // Flip GcP Values with Bin Error Probabilities
         // flipRates determines the flip rate for this specific CpG site
         bin = findBin(i);
-        left = flipRates[i];
-        right = flipRates[i];
-        if (bin < 25) {
-            left *= double(bin) / (50 - bin);
-        } else if (bin > 25) {
-            right *= double(50 - bin) / bin;
-        }
+        methy = flipRates[i] * double(bin) / 50;
+        demethy = flipRates[i] * (1 - double(bin) / 50);
+        
         // One side of CpG Site
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] < 1) {
             // Methy Value
-            if (r1 < left) {
+            if (r1 < methy) {
                 Genomes[i] += 1;
             }
         } else {
             // Demethy Value
-            if (r1 < right) {
+            if (r1 < demethy) {
                 Genomes[i] -= 1;
             }
         }
@@ -82,12 +78,12 @@ void Cell::randomCpGReplacement() {
         r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
         if (Genomes[i] <= 1) {
             // Methy Value
-            if (r1 < left) {
+            if (r1 < methy) {
                 Genomes[i] += 1;
             }
         } else {
             // Demethy Value
-            if (r1 < right) {
+            if (r1 < demethy) {
                 Genomes[i] -= 1;
             }
         
