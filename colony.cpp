@@ -16,7 +16,11 @@ Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double O
 
     binFlipRates = new double[51];
     for(int i = 0; i < 51; i++) {
-        binFlipRates[i] = minFlipRate + (maxFlipRate - minFlipRate) * double(abs(i - 25)) / 25;
+        if (i <= 25) {
+            binFlipRates[i] = minFlipRate * pow(maxFlipRate / minFlipRate, double(i)/25);
+        } else {
+            binFlipRates[i] = binFlipRates[50-i];
+        }
     }
 
     for(int i = 0; i < numCells; i++) {
