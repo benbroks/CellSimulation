@@ -12,7 +12,7 @@ using namespace std;
 
 string paramFile = "param.h";
 string line, i_fp, m_o_fp, s_o_fp;
-int N, T, P, s;
+int N, T, B, P, s;
 double SMin, SMax, R, OR, X, E, M;
 
 // Goes through parameter file to obtain N,T,S,R,E values and relevant file paths
@@ -25,6 +25,9 @@ void findParam() {
         }
         else if (line[0] == 'T') {
             T = stoi(line.substr(2,line.length()));
+        }
+        else if (line[0] == 'B') {
+            B = stoi(line.substr(2,line.length()));
         }
         else if (line[0] == 'S') {
             if(line[2] == 'a') {
@@ -74,7 +77,7 @@ void findParam() {
 }
 
 // Reads Excel file to obtain CpG distribution
-int * findCPG(int * binSize) {
+void findCPG(int * binSize, double * binFlipRates) {
     ifstream input(i_fp);
     int i = 0;
     while(getline(input, line)) {
@@ -82,32 +85,40 @@ int * findCPG(int * binSize) {
             int commaCount = 0;
             int j = 0;
             string sizeOfBin = "";
-            while(commaCount < 5) {
+            string errorRate = "";
+            while(commaCount < 8) {
                 if(line[j] == ',') {
                     commaCount ++;
                 } else if (commaCount == 4) {
                     sizeOfBin = sizeOfBin + line[j];
+                } else if (commaCount == 7) {
+                    errorRate = errorRate + line[j];
                 }
                 j ++;
             }
             binSize[i] = stoi(sizeOfBin);
+            binFlipRates[i] = stod(errorRate);
             i ++;
         } 
     }
-    return binSize;
+    return;
 }
 
 int main(int argc, char *argv[]){
     findParam();
     int binSize[51];
-    findCPG(binSize);
+    double binFlipRates[51];
+    findCPG(binSize, binFlipRates);
+    if (B == 0) {
+        binFlipRates[0] = -1;
+    }
     if (s == -1) {
         srand (static_cast <unsigned> (time(0)));
     } else {
         srand(s);
     }
     // Instantiate
-    Colony c = Colony(N, X, P, SMin, SMax, R, OR, E, M, binSize, true);
+    Colony c = Colony(N, X, P, SMin, SMax, R, OR, E, M, binSize, binFlipRates, true);
     // Transition
     c.transition(T, s_o_fp, m_o_fp);
     // Print Final Matrix and Statistics. -1 Indicates completed simulation.

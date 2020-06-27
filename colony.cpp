@@ -1,6 +1,6 @@
 #include "colony.h"
 
-Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double OR, double E, double M, int binSize[], bool V) {
+Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double OR, double E, double M, int binSize[], double binFlipRates[], bool V) {
     numCells = N;
     numBins = 51;
     numGenomes = 27634;
@@ -14,12 +14,14 @@ Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double O
     maxExpansionProportion = M;
     statFrequency = P;
 
-    binFlipRates = new double[51];
-    for(int i = 0; i < 51; i++) {
-        if (i <= 25) {
-            binFlipRates[i] = minFlipRate * pow(maxFlipRate / minFlipRate, double(i)/25);
-        } else {
-            binFlipRates[i] = binFlipRates[50-i];
+    if (binFlipRates[0] == -1) {
+        // Only perform exponential if first index is -1
+        for(int i = 0; i < 51; i++) {
+            if (i <= 25) {
+                binFlipRates[i] = minFlipRate * pow(maxFlipRate / minFlipRate, double(i)/25);
+            } else {
+                binFlipRates[i] = binFlipRates[50-i];
+            }
         }
     }
 
@@ -45,7 +47,6 @@ Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double O
 
 Colony::~Colony() 
 {   
-    delete [] binFlipRates;
     delete [] Cells;
 } 
 

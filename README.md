@@ -4,9 +4,9 @@
 - param.h 
     - N: Number of Cells.
     - T: Number of Cell Transitions.
-    - CpG Site Flip Rate is decided at simulation start along a uniform distribution. Each CpG site has a unique flip rate, it persists across cells.
-        - SMin: Lower bound of CpG Site Flip Rate.
-        - SMax: Upper bound of CpG Site Flip Rate.
+    - B: Mode of CpG Site Flip Rates [Select 0 for an Exponential Relationship (peak at Bin 0.5) and 1 for Manual Entry.
+    - SMin: Lower bound of CpG Site Flip Rate.
+    - SMax: Upper bound of CpG Site Flip Rate.
     - R: Random Cell Replacement Rate. [i.e. At every transition, each cell has R prob. of regenerating with age = 0]
     - OR: Orderly Replacement Rate. [i.e. At every transition, OR*N cells will regenerate with age = 0]
     - X: Neoplasia Cycle Number. The cycle number at which a random cell becomes cancerous/neoplastic.

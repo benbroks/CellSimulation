@@ -4,6 +4,9 @@ N=100
 [Number of Transitions] 
 T=200
 
+[CpG Site Flip Rate Behavior - 0 for Exponential, 1 for Manual Entry]
+B=1
+
 [CpG Site Flip Rate Lower Bound] 
 SMin=0.0005
 
