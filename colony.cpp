@@ -1,6 +1,6 @@
 #include "colony.h"
 
-Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double OR, double E, double M, int binSize[], double binFlipRates[], bool V) {
+Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double OR, double E, double M, double C, int binSize[], double binFlipRates[], bool V) {
     numCells = N;
     numBins = 51;
     numGenomes = 27634;
@@ -12,6 +12,7 @@ Colony::Colony(int N, int X, int P, double SMin, double SMax, double R, double O
     verbose = V;
     neoplasticCycle = X;
     maxExpansionProportion = M;
+    survivalRate = C;
     statFrequency = P;
 
     if (binFlipRates[0] == -1) {
@@ -144,6 +145,11 @@ void Colony::transition(int T, string s_o_fp, string m_o_fp) {
                 replaced++;
             }
         } 
+        // Survival Replacement
+        if (survivalRate < 1) {
+            cellDeathAndReplacement();
+        }
+
         // Normal Transition
         for(int j = 0; j < numCells; j++) {
             r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -197,6 +203,39 @@ void Colony::cellExpansion() {
             }
         }
     }
+}
+
+// Very similar to cell expansion function
+void Colony::cellDeathAndReplacement() {
+    float r1;
+    int newCell;
+    set<int> liveCells, replacedCells;
+    set <int> :: iterator itr1, itr2;
+    // Choosing which cells survive vs. get replaced
+    for (int i = 0; i < numCells; i++) {
+        r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        // Survives
+        if (r1 < survivalRate) {
+            liveCells.insert(i);
+        } else {
+            // Replaced
+            replacedCells.insert(i);
+        }
+    }
+
+    // Randomly pick cell to replace old ones with
+    for(itr1 = replacedCells.begin(); itr1 != replacedCells.end(); itr1++) {
+        newCell = rand() % liveCells.size();
+        itr2 = liveCells.begin();
+        for(int i = 0; i < newCell; i++) {
+            itr2++;
+        }
+        Cells[*itr2] = Cells[*itr1];
+        Cells[*itr2].clearAge();
+        neoplasticCells.insert(*itr2);
+        healthyCells.erase(*itr2);
+    }
+
 }
 
 void Colony::printStats(string o_fp, int numTransitions) {

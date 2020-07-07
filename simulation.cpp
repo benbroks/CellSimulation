@@ -13,7 +13,7 @@ using namespace std;
 string paramFile = "param.h";
 string line, i_fp, m_o_fp, s_o_fp;
 int N, T, B, P, s;
-double SMin, SMax, R, OR, X, E, M;
+double SMin, SMax, R, OR, X, E, M, C;
 
 // Goes through parameter file to obtain N,T,S,R,E values and relevant file paths
 
@@ -50,6 +50,9 @@ void findParam() {
         }
         else if (line[0] == 'M') {
             M = stof(line.substr(2,line.length()));
+        }
+        else if (line[0] == 'C') {
+            C = stof(line.substr(2,line.length()));
         }
         else if (line[0] == 'A') {
             s = stoi(line.substr(2,line.length()));
@@ -118,7 +121,7 @@ int main(int argc, char *argv[]){
         srand(s);
     }
     // Instantiate
-    Colony c = Colony(N, X, P, SMin, SMax, R, OR, E, M, binSize, binFlipRates, true);
+    Colony c = Colony(N, X, P, SMin, SMax, R, OR, E, M, C, binSize, binFlipRates, true);
     // Transition
     c.transition(T, s_o_fp, m_o_fp);
     // Print Final Matrix and Statistics. -1 Indicates completed simulation.

@@ -12,6 +12,7 @@
     - X: Neoplasia Cycle Number. The cycle number at which a random cell becomes cancerous/neoplastic.
     - E: Expansion Rate. At every transition, each neoplastic cell has an E prob. of turning a random cell into a neoplastic one.
     - M: Max Expansion Rate. The number of neoplastic cells will never exceed M*N.
+    - C: Transition Survival Rate. C*N cells will survive a transition. (1-C) * N cells will be replaced by random living cells.
     - A: Random Seed. Keep this the same to make experiments repeatable. Set it to -1 if you want a consistently random experiment.
     - P: Statistics Return Regularity. Set P to frequency at which statistics should be returned. Set P to -1 if statistics should just print at the end. [e.g. P=100 will return stats_X.csv for X=100,200,300,etc.]
     - init_table_fp: Gives file path to read from to obtain bin sizes.
