@@ -1,5 +1,17 @@
 # CellSimulation
 
+## Compilation Instructions (For Mac Terminal)
+- Run  `make` to compile the executable.
+    - Are you seeing `xcrun: error: invalid active developer path`? Follow instructions linked (here)[https://apple.stackexchange.com/questions/254380/why-am-i-getting-an-invalid-active-developer-path-when-attempting-to-use-git-a].
+    - Are you seeing `fatal error: 'filesystem' file not found`? Follow instructions linked (here)[https://stackoverflow.com/questions/39231363/fatal-error-filesystem-no-such-file-or-directory/39231488].
+
+## Running the Program
+- Run `./simulation` (after successfully compiling).
+
+## Cleaning Up
+- Run `make clean` to purge the executable and associated files.
+
+
 ## Input
 - param.h 
     - N: Number of Cells.
