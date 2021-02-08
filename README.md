@@ -1,5 +1,14 @@
 # CellSimulation
 
+## Summary ##
+This project is used to simulate the life cycle of _N_ cells over _T_ transitions. Each cell is represented as a collection of (27634) CpG sites. Each CpG site represents two binary bits (taking on values of _0_ or _1_), which is concretely stored as an integer with value _0_, _1_, or _2_.
+
+At each discrete transition, a variety of alterations can be made to each cell. Cells can die and become randomly replaced by a copy of another cell or a brand-new cell can pop up in its old place. Cells can mutate and only change at one of their CpG sites.
+
+Information about the cells is stored in `csv` format. Each row represents a single cell. Each column represents a unique CpG site. (There are _N_ rows and 27634 columns) The final state of the cell "colony" is displayed via two CSVs (as not to exceed the Excel column limit). The first file contains the first 27634/2 = 13817 columns and _N_ rows. The second file follows the same dimensions, but the data from the latter half of columns. We collect intermediate and final statistics about the cells. These are contained within a separate statistics output file. 
+
+See the attached input and output sections for more information on the configurability of the tool.
+
 ## Compilation Instructions (For Mac Terminal)
 - Run  `make` to compile the executable.
     - Are you seeing `xcrun: error: invalid active developer path`? Follow instructions linked (here)[https://apple.stackexchange.com/questions/254380/why-am-i-getting-an-invalid-active-developer-path-when-attempting-to-use-git-a].
@@ -10,7 +19,6 @@
 
 ## Cleaning Up
 - Run `make clean` to purge the executable and associated files.
-
 
 ## Input
 - param.h 
