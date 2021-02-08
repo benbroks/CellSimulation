@@ -19,7 +19,7 @@ Information about the cells is stored in `csv` format. Each row represents a sin
 - Run `./simulation` (after successfully compiling) to actually run the cell simulator. Expect the simulation to take a number of hours if transitions or cells number in the tens of thousands. 
 - Nuclear Option if nothing works... (this will require a bit more time but has consistent results):
     - Follow these [Virtual Machine Download Instructions](http://bits.usc.edu/cs104/installing-course-vm.html). This creates a virtual machine and a consistent environment in which to compile/run C++.
-    - Launch the VM and follow the above instructions from inside it.
+    - Launch the VM and follow this repo's (not the vm download's) instructions from inside it.
 
 ## Cleaning Up
 - Run `make clean` to purge the executable and associated files.
