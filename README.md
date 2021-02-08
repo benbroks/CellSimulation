@@ -3,19 +3,23 @@
 ## Summary ##
 This project is used to simulate the life cycle of _N_ cells over _T_ transitions. Each cell is represented as a collection of (27634) CpG sites. Each CpG site represents two binary bits (taking on values of _0_ or _1_), which is concretely stored as an integer with value _0_, _1_, or _2_.
 
-At each discrete transition, a variety of alterations can be made to each cell. Cells can die and become randomly replaced by a copy of another cell or a brand-new cell can pop up in its old place. Cells can mutate and only change at one of their CpG sites.
+At each discrete transition, a variety of alterations can be made to each cell. Cells can die and become randomly replaced by a copy of another cell or a brand-new cell can pop up in its old place. Cells can mutate and only change at a few of their CpG sites. See the attached input and output sections for more information on the configurability of the tool.
 
 Information about the cells is stored in `csv` format. Each row represents a single cell. Each column represents a unique CpG site. (There are _N_ rows and 27634 columns) The final state of the cell "colony" is displayed via two CSVs (as not to exceed the Excel column limit). The first file contains the first 27634/2 = 13817 columns and _N_ rows. The second file follows the same dimensions, but the data from the latter half of columns. We collect intermediate and final statistics about the cells. These are contained within a separate statistics output file. 
 
-See the attached input and output sections for more information on the configurability of the tool.
 
-## Compilation Instructions (For Mac Terminal)
-- Run  `make` to compile the executable.
-    - Are you seeing `xcrun: error: invalid active developer path`? Follow instructions linked (here)[https://apple.stackexchange.com/questions/254380/why-am-i-getting-an-invalid-active-developer-path-when-attempting-to-use-git-a].
-    - Are you seeing `fatal error: 'filesystem' file not found`? Follow instructions linked (here)[https://stackoverflow.com/questions/39231363/fatal-error-filesystem-no-such-file-or-directory/39231488].
-
-## Running the Program
-- Run `./simulation` (after successfully compiling).
+## Instructions
+- Download or clone this project! Unzip it and navigate inside the directory via your Terminal.
+- Verify that your machine is able to compile C++ code. You need `g++`.
+- Run `make` to compile the project.
+- Debug/prerequisite instructions (for mac):
+    - Verify that `xcode` is downloaded on your machine. Verify that `command line developer tools` are downloaded on your machine.
+    - Are you seeing `xcrun: error: invalid active developer path`? Follow instructions linked [here](https://apple.stackexchange.com/questions/254380/why-am-i-getting-an-invalid-active-developer-path-when-attempting-to-use-git-a).
+    - Are you seeing `fatal error: 'filesystem' file not found`? Follow instructions linked [here](https://stackoverflow.com/questions/39231363/fatal-error-filesystem-no-such-file-or-directory/39231488).
+- Run `./simulation` (after successfully compiling) to actually run the cell simulator. Expect the simulation to take a number of hours if transitions or cells number in the tens of thousands. 
+- Nuclear Option if nothing works... (this will require a bit more time but has consistent results):
+    - Follow these [Virtual Machine Download Instructions](http://bits.usc.edu/cs104/installing-course-vm.html). This creates a virtual machine and a consistent environment in which to compile/run C++.
+    - Launch the VM and follow the above instructions from inside it.
 
 ## Cleaning Up
 - Run `make clean` to purge the executable and associated files.
